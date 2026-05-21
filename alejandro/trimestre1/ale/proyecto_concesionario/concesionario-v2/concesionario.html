@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONCESIONARIO</title>
+    <link rel="stylesheet" href="concesionario.css">
+    <script src="concesionario.js" defer></script>
+</head>
+<body>
+    
+    <h1 class="titulo">-DEALER IN JAVASCRIPT-</h1>
+
+
+    <div class="cont-general">
+        <!--contenedor de la izquierda-->
+        <div class = "cont-izquierda">
+
+            <h1 class="titulo-formulario">FILL THE FORM</h1>
+                <div class="cont-pequeño-formulario">
+                    <form id="formulario">
+                        <label for="brand">Car brand:</label>
+                        <input type="text" id="brand" name="brand" required><br><br>
+                
+                        <label for="color">Car color:</label>
+                        <input type="text" id="color" name="color" required><br><br>
+                
+                        <label for="year">Car year:</label>
+                        <input type="number" id="year" name="year" min="2000" max="2025" required><br><br>
+                
+                        <label for="plate">Car plate:</label>
+                        <input type="text" id="plate" name="plate" required><br><br>
+                
+                        <label for="category">Category:</label>
+                        <select id="category" name="category" required>
+                            <option value="" disabled selected>Select a category</option>
+                            <option value="sedan">Sedan</option>
+                            <option value="suv">SUV</option>
+                            <option value="truck">Truck</option>
+                            <option value="coupe">Coupe</option>
+                            <option value="other">Other</option>
+                        </select><br><br>
+                
+                        <label>Fuel type:</label><br>
+                        <input type="radio" id="gasoline" name="fuel_type" value="gasoline" required>
+                        <label for="gasoline">Gasoline</label><br>
+                        <input type="radio" id="electric" name="fuel_type" value="electric">
+                        <label for="electric">Electric</label><br><br>
+                
+                        <label for="mot">MOT in force:</label>
+                        <input type="checkbox" id="mot" name="mot"><br><br>
+                
+                        <button type="button" id="btadd">Add</button>
+                        <button type="button" id="btnmostrar">Show Cars</button>
+                        <button type="button" id="btndelete">Delete Car</button>
+                    </form>
+                </div>
+
+        </div>
+                    
+        <!--Separador-->
+        <div class="separador"></div>
+
+        <!--contenedor de la derecha-->
+        <div class="cont-derecha">
+        
+            <h1 class="titulo-lista">CAR LIST</h1>
+        
+            <div class="cont-pequeño-lista" id="lista-coches">
+                
+                <ul id="lista-cars">
+
+                </ul>
+                <div id="contador"></div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <footer class="cont-footer">
+        <h1>HORA ACTUAL</h1>
+
+        <form id="formulario-reloj">
+            <label for="reloj">Selecciona un color</label>
+            <select id="opciones" name="color">
+                <option value="blue">Azul</option>
+                <option value="red">Rojo</option>
+                <option value="green">Verde</option>
+                <option value="purple">Morado</option>
+            </select>
+        </form>
+
+        <div class="reloj"></div>
+
+        <button type="button" id="stopClockButton">Parar/iniciar</button>
+        <!--Añadir datos en localStorage-->
+        <button type="button" id="anadirLocalStorage" value="Añadir a Local Storage">Añadir a Local Storage</button>
+    </footer>
+</body >
+</html>

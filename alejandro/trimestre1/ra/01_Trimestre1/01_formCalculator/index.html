@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+  <meta charset="UTF-8">
+  <title>Simple Calculator</title>
+  <!-- Link to the external CSS file for styling -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Link to the external JavaScript file; defer ensures it runs after the DOM is loaded -->
+  <script src="calculator2.js" defer></script>
+  <!-- You can also write the script reference after the end of the body tag -->
+</head>
+
+<body>
+  <!-- Main heading of the page -->
+  <h2>Simple Calculator</h2>
+
+  <!-- Form containing the inputs and options for the calculator -->
+  <form id="calcForm">
+    <!-- Input for the first operand -->
+    <label for="op1">Operand 1:</label>
+    <input type="text" id="op1" name="op1"><br><br>
+
+    <!-- Input for the second operand -->
+    <label for="op2">Operand 2:</label>
+    <input type="text" id="op2" name="op2"><br><br>
+
+    <!-- Radio buttons to select the operation -->
+    <label>
+      <input type="radio" name="operation" value="add" checked> Addition
+    </label>
+    <label>
+      <input type="radio" name="operation" value="subtract"> Subtraction
+    </label>
+    <label>
+      <input type="radio" name="operation" value="multiply"> Multiplication
+    </label>
+    <label>
+      <input type="radio" name="operation" value="divide"> Division
+    </label><br><br>
+
+    <!-- Button that calls the calculate() function when clicked -->
+    <button type="button" onclick="calculate()">Calculate</button>
+  </form>
+</body>
+</html>

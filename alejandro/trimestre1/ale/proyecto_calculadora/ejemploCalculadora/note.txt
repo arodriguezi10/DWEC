@@ -1,0 +1,4 @@
+-Use switch statements to handle the operation instead of sentence if.
+
+-Use loops to validate the input fields (e.g., check that both fields are numbers, check that
+both fields are not empty). Remember that you can iterate through all the fields of an Elements array.

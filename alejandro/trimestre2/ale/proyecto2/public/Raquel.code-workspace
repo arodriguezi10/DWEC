@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../Raquel"
+		},
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Raquel-A"
+	}
+}

@@ -1,0 +1,254 @@
+{
+  "Geografía": [
+    {
+      "text": "¿Cuál es el punto más bajo de la superficie terrestre continental?",
+      "choices": ["Valle de la Muerte", "Mar Muerto", "Depresión de Turpan"],
+      "answer": "Mar Muerto"
+    },
+    {
+      "text": "¿Qué país africano tiene forma casi rectangular perfecta?",
+      "choices": ["Níger", "Chad", "Egipto"],
+      "answer": "Chad"
+    },
+    {
+      "text": "¿Cuál es la capital más austral del mundo?",
+      "choices": ["Wellington", "Canberra", "Buenos Aires"],
+      "answer": "Wellington"
+    },
+    {
+      "text": "¿Qué río atraviesa más países?",
+      "choices": ["Danubio", "Nilo", "Rin"],
+      "answer": "Danubio"
+    },
+    {
+      "text": "¿Qué cordillera separa Europa de Asia tradicionalmente?",
+      "choices": ["Alpes", "Cáucaso", "Urales"],
+      "answer": "Urales"
+    },
+    {
+      "text": "¿Cuál es la isla más grande del mundo?",
+      "choices": ["Groenlandia", "Nueva Guinea", "Borneo"],
+      "answer": "Groenlandia"
+    },
+    {
+      "text": "¿Qué país tiene más volcanes activos?",
+      "choices": ["Japón", "Indonesia", "Estados Unidos"],
+      "answer": "Indonesia"
+    },
+    {
+      "text": "¿Cuál es el desierto cálido más grande del mundo?",
+      "choices": ["Sahara", "Arabia", "Kalahari"],
+      "answer": "Sahara"
+    }
+  ],
+  "Historia": [
+    {
+      "text": "¿Quién fue el emperador romano durante la erupción del Vesubio en el 79 d.C.?",
+      "choices": ["Nerón", "Tito", "Domiciano"],
+      "answer": "Tito"
+    },
+    {
+      "text": "¿En qué año se firmó la Carta Magna?",
+      "choices": ["1066", "1215", "1492"],
+      "answer": "1215"
+    },
+    {
+      "text": "¿Qué batalla marcó el final de Napoleón Bonaparte?",
+      "choices": ["Austerlitz", "Waterloo", "Trafalgar"],
+      "answer": "Waterloo"
+    },
+    {
+      "text": "¿Qué imperio fue gobernado por Suleimán el Magnífico?",
+      "choices": ["Bizantino", "Otomano", "Persa"],
+      "answer": "Otomano"
+    },
+    {
+      "text": "¿En qué ciudad fue asesinado Julio César?",
+      "choices": ["Roma", "Alejandría", "Atenas"],
+      "answer": "Roma"
+    },
+    {
+      "text": "¿Qué país inició la Revolución Industrial?",
+      "choices": ["Francia", "Alemania", "Reino Unido"],
+      "answer": "Reino Unido"
+    },
+    {
+      "text": "¿Qué guerra enfrentó a Esparta y Atenas?",
+      "choices": ["Guerras Médicas", "Guerra del Peloponeso", "Guerras Púnicas"],
+      "answer": "Guerra del Peloponeso"
+    },
+    {
+      "text": "¿Quién fue el líder de Alemania durante la Primera Guerra Mundial?",
+      "choices": ["Guillermo II", "Hitler", "Bismarck"],
+      "answer": "Guillermo II"
+    }
+  ],
+  "Ciencia": [
+    {
+      "text": "¿Qué ley establece que la presión y el volumen de un gas son inversamente proporcionales?",
+      "choices": ["Ley de Charles", "Ley de Boyle", "Ley de Avogadro"],
+      "answer": "Ley de Boyle"
+    },
+    {
+      "text": "¿Cuál es la constante de la velocidad de la luz en el vacío (aproximadamente)?",
+      "choices": ["3x10^8 m/s", "3x10^6 m/s", "3x10^10 m/s"],
+      "answer": "3x10^8 m/s"
+    },
+    {
+      "text": "¿Qué organelo celular es responsable de la producción de energía?",
+      "choices": ["Ribosoma", "Mitocondria", "Lisósoma"],
+      "answer": "Mitocondria"
+    },
+    {
+      "text": "¿Cuál es el pH aproximado del agua pura a 25°C?",
+      "choices": ["5", "7", "9"],
+      "answer": "7"
+    },
+    {
+      "text": "¿Qué científico descubrió la penicilina?",
+      "choices": ["Pasteur", "Fleming", "Curie"],
+      "answer": "Fleming"
+    },
+    {
+      "text": "¿Cuál es el hueso más pequeño del cuerpo humano?",
+      "choices": ["Estribo", "Yunque", "Martillo"],
+      "answer": "Estribo"
+    },
+    {
+      "text": "¿Qué planeta tiene el día más largo (rotación más lenta)?",
+      "choices": ["Venus", "Mercurio", "Neptuno"],
+      "answer": "Venus"
+    },
+    {
+      "text": "¿Qué tipo de enlace implica la transferencia de electrones?",
+      "choices": ["Covalente", "Iónico", "Metálico"],
+      "answer": "Iónico"
+    }
+  ],
+  "Arte y Literatura": [
+    {
+      "text": "¿Quién escribió 'Ulises'?",
+      "choices": ["Joyce", "Kafka", "Proust"],
+      "answer": "Joyce"
+    },
+    {
+      "text": "¿Qué pintor es conocido por la Capilla Sixtina?",
+      "choices": ["Rafael", "Miguel Ángel", "Caravaggio"],
+      "answer": "Miguel Ángel"
+    },
+    {
+      "text": "¿Qué movimiento artístico precede al Romanticismo?",
+      "choices": ["Barroco", "Neoclasicismo", "Rococó"],
+      "answer": "Neoclasicismo"
+    },
+    {
+      "text": "¿Quién escribió 'El proceso'?",
+      "choices": ["Kafka", "Hesse", "Mann"],
+      "answer": "Kafka"
+    },
+    {
+      "text": "¿Qué poeta español pertenece a la Generación del 27?",
+      "choices": ["Lorca", "Machado", "Unamuno"],
+      "answer": "Lorca"
+    },
+    {
+      "text": "¿Qué estilo arquitectónico caracteriza Notre Dame?",
+      "choices": ["Románico", "Gótico", "Barroco"],
+      "answer": "Gótico"
+    },
+    {
+      "text": "¿Quién pintó 'Las Meninas'?",
+      "choices": ["Goya", "Velázquez", "El Greco"],
+      "answer": "Velázquez"
+    },
+    {
+      "text": "¿Qué autor escribió 'La metamorfosis'?",
+      "choices": ["Kafka", "Orwell", "Camus"],
+      "answer": "Kafka"
+    }
+  ],
+  "Deportes": [
+    {
+      "text": "¿Quién tiene más títulos de Grand Slam en tenis masculino (históricamente destacado)?",
+      "choices": ["Federer", "Nadal", "Djokovic"],
+      "answer": "Djokovic"
+    },
+    {
+      "text": "¿En qué deporte compite la Ryder Cup?",
+      "choices": ["Golf", "Tenis", "Críquet"],
+      "answer": "Golf"
+    },
+    {
+      "text": "¿Cuántos anillos hay en la bandera olímpica?",
+      "choices": ["4", "5", "6"],
+      "answer": "5"
+    },
+    {
+      "text": "¿Qué país inventó el fútbol moderno?",
+      "choices": ["Brasil", "Inglaterra", "Italia"],
+      "answer": "Inglaterra"
+    },
+    {
+      "text": "¿En qué deporte destaca Usain Bolt?",
+      "choices": ["Atletismo", "Natación", "Ciclismo"],
+      "answer": "Atletismo"
+    },
+    {
+      "text": "¿Cuántos sets se juegan en un partido de tenis masculino de Grand Slam?",
+      "choices": ["3", "5", "7"],
+      "answer": "5"
+    },
+    {
+      "text": "¿Qué país ganó el primer Mundial de fútbol?",
+      "choices": ["Brasil", "Uruguay", "Italia"],
+      "answer": "Uruguay"
+    },
+    {
+      "text": "¿Qué deporte usa la Copa Stanley?",
+      "choices": ["Hockey sobre hielo", "Baloncesto", "Béisbol"],
+      "answer": "Hockey sobre hielo"
+    }
+  ],
+  "Entretenimiento": [
+    {
+      "text": "¿Quién compuso la banda sonora de 'Star Wars'?",
+      "choices": ["Hans Zimmer", "John Williams", "Ennio Morricone"],
+      "answer": "John Williams"
+    },
+    {
+      "text": "¿Qué serie ganó múltiples premios Emmy con dragones y casas nobles?",
+      "choices": ["The Witcher", "Game of Thrones", "Vikings"],
+      "answer": "Game of Thrones"
+    },
+    {
+      "text": "¿Qué actor interpretó al Joker en 'The Dark Knight'?",
+      "choices": ["Joaquin Phoenix", "Heath Ledger", "Jared Leto"],
+      "answer": "Heath Ledger"
+    },
+    {
+      "text": "¿Qué videojuego popular fue desarrollado por Mojang?",
+      "choices": ["Terraria", "Minecraft", "Roblox"],
+      "answer": "Minecraft"
+    },
+    {
+      "text": "¿Qué director creó 'Pulp Fiction'?",
+      "choices": ["Tarantino", "Scorsese", "Kubrick"],
+      "answer": "Tarantino"
+    },
+    {
+      "text": "¿Qué saga incluye el personaje Geralt de Rivia?",
+      "choices": ["Dark Souls", "The Witcher", "Skyrim"],
+      "answer": "The Witcher"
+    },
+    {
+      "text": "¿Qué película ganó el Oscar a mejor película en 1994?",
+      "choices": ["Pulp Fiction", "Forrest Gump", "Braveheart"],
+      "answer": "Forrest Gump"
+    },
+    {
+      "text": "¿Qué compañía creó la consola PlayStation?",
+      "choices": ["Nintendo", "Sony", "Sega"],
+      "answer": "Sony"
+    }
+  ]
+}

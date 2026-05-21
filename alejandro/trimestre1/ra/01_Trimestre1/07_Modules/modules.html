@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chuck Norris Jokes</title>
+    <!-- Link to main script (defer to load after DOM) -->
+    <!-- type="module" → Allows using import / export in script.js to explain the use of modules -->
+    <script type="module" src="script.js" defer></script>
+</head>
+<body>
+
+    <!-- API joke -->
+    <h2 id="cita">Loading Chuck Norris joke...</h2>
+
+    <!-- Color selector -->
+    <label for="color">Joke Color:</label>
+    <select id="color">
+        <option value="black">Black</option>
+        <option value="red">Red</option>
+        <option value="green">Green</option>
+        <option value="blue">Blue</option>
+    </select>
+    <button id="btnColor">Change Color</button>
+
+    <!-- Add a new joke -->
+    <h3>Add Your Joke</h3>
+    <form id="form">
+        <input type="text" id="texto" placeholder="Type your joke here" required>
+        <button id="btnAdd">Add</button>
+    </form>
+
+    <!-- User-added jokes -->
+    <h3>Your Jokes</h3>
+    <div id="lista"></div>
+
+</body>
+</html>

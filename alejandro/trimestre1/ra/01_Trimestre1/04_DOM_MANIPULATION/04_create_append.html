@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo createElement y appendChild</title>
+    <style>
+        #container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            width: 300px;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h2>Lista de Tareas</h2>
+    </div>
+
+    <script>
+        // Array de tareas
+        const tareas = ["Comprar leche", "Estudiar JavaScript", "Hacer ejercicio"];
+
+        // Seleccionamos el contenedor donde se agregará la lista
+        const container = document.getElementById("container");
+
+        // Creamos un elemento ul (lista desordenada)
+        const lista = document.createElement("ul");
+
+        // Recorremos las tareas y creamos un li por cada una
+        tareas.forEach(tarea => {
+            let item = document.createElement("li"); // Creamos el li
+            item.textContent = tarea; // Asignamos el texto
+            lista.appendChild(item); // Agregamos el li a la lista
+        });
+
+        // Finalmente agregamos la lista al contenedor
+        container.appendChild(lista);
+    </script>
+</body>
+</html>

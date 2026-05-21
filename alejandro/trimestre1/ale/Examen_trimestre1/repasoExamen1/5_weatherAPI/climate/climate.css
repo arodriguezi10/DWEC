@@ -1,0 +1,52 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body{
+    background-color: #ececec;
+    font-family: 'Ubuntu', sans-serif;
+  }
+
+  .head{
+    background-color: rgb(187, 70, 49);
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    color: white;
+  }
+
+  #container{
+    width: 15vw;
+    height: 14vh;
+    margin: 100px auto;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    flex-wrap: wrap;
+    background-color: rgb(187, 70, 49);
+    color: beige;
+  }
+
+  #container strong{
+    color: black;
+  }
+
+  .card{
+    width: 230px;
+    margin-top: 100px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .card img {
+    width: 100%;
+  }
+
+  .card span{
+    color: #6e6e6e;
+    font-weight: 500;
+  }

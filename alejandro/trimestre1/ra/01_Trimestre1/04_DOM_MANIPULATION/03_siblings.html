@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>JavaScript Siblings</title>
+</head>
+<body>
+    <ul id="menu">
+        <li>Home</li>
+        <li>Products</li>
+        <li class="current">Customer Support</li>
+        <li>Careers</li>
+        <li>Investors</li>
+        <li>News</li>
+        <li>About Us</li>
+    </ul>
+    
+    <script>
+        /* Function to get all sibling elements of a given element */
+        //function expression, anonymous function assigned to a variable
+        let getSiblings = function (e) {
+            // for collecting siblings
+            let siblings = []; // empty array
+            // if no parent, return no sibling
+            if(!e.parentNode) {
+                return siblings;
+            }
+            // first child of the parent node
+            let sibling  = e.parentNode.firstChild;
+            // collecting siblings
+            while (sibling) {
+                // ensure it's an element node and not the element itself
+                // nodeType 1 is an element node
+                // also excludes text nodes and comment nodes
+                // e is the original element passed to the function
+                if (sibling.nodeType === 1 && sibling !== e) {
+                    siblings.push(sibling);
+                }
+                sibling = sibling.nextSibling;
+            }
+            return siblings;
+        };
+        // querySelector to select the first element with class 'current'
+        // siblings will hold all sibling elements of the selected element
+        let ArraySiblings = getSiblings(document.querySelector('.current'));
+        // Crear un array para guardar los textos
+        let siblingText = [];
+
+        console.log("Ver 1, recorrer array:");
+        /** Version 1: Recorrer la lista de hermanos **/
+        for (let i = 0; i < ArraySiblings.length; i++) {
+            let element = ArraySiblings[i];
+            console.log(`elemento ${i} : ${element.innerHTML}`);
+            siblingText.push(element.innerHTML);
+        }
+
+        /** Version 2: Usar el método map de los arrays **/
+        // map to extract innerHTML of each sibling element
+        // map no modifica el array original, sino que crea un nuevo array 
+        // con los resultados de la función aplicada a cada elemento
+        // siblingText will hold the innerHTML of each sibling
+        console.log("Ver 2, usando map:");
+        //Función arrow que toma un elemento i y devuelve i.innerHTML
+        //innerHTML es una propiedad de los elementos del DOM que contiene 
+        //todo el contenido HTML que hay dentro del elemento.
+        siblingText = ArraySiblings.map(i => i.innerHTML);
+        console.log(siblingText);
+    </script>
+</body>
+</html>

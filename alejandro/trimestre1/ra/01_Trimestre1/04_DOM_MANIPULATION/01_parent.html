@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JavaScript parentNode</title>
+</head>
+<body>
+    <div id="main">
+        <p class="note">This is a note!</p>
+    </div>
+
+    <script>
+        // Select the element with class 'note'
+        //querySelector returns the first matching element it finds
+        let note = document.querySelector('.note');
+        // Log its parent node to the console
+        console.log(note.parentNode);
+        
+        /*
+        The node.parentNode returns the read-only parent node of a
+        specified node or null if it does not exist.
+        
+        
+        The document and DocumentFragment do not have a parent node
+
+         🌱 ¿Qué es un DocumentFragment?
+
+            Un DocumentFragment es un tipo de nodo del DOM que:
+
+            No tiene padre (no pertenece al documento mientras trabajas con él).
+
+            No está directamente en el DOM, por lo que no causa re-renderización.
+
+            Permite crear y manipular muchos nodos de forma eficiente antes de insertarlos en el DOM.
+
+            Cuando lo insertas en el DOM, su propio nodo desaparece y solo se insertan sus hijos.
+
+            Es como trabajar en un “borrador” o una “caja temporal”.
+
+            📦 Ejemplo visual
+
+            Imagina que quieres insertar 100 elementos <li>.
+
+            Sin DocumentFragment
+
+                    Insertas cada <li> directamente en el DOM → la página se re-renderiza 100 veces → lento.
+
+            Con DocumentFragment
+
+                    Creas un fragmento vacío.
+
+                    Añades los 100 <li> al fragmento.
+
+                    Insertas el fragmento completo al final → solo 1 renderizado → rápido.
+        */
+
+    </script>
+</body>
+</html>

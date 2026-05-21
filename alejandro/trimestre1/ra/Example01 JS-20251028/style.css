@@ -1,0 +1,5 @@
+/* One simple style: center text */
+body {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}

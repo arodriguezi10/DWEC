@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dragon Manager</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1>Dragon Manager</h1>
+
+<label>Name:</label>
+<input type="text" id="nameInput" placeholder="Dragon name">
+
+<label>Type:</label>
+<input type="text" id="typeInput" placeholder="Dragon type">
+
+<label>Age:</label>
+<input type="number" id="ageInput" placeholder="Age">
+
+<label>Power:</label>
+<input type="number" id="powerInput" placeholder="Power">
+
+<button id="addDragonBtn">Add Dragon</button>
+<button id="loadDragonsBtn">Load Dragons from Server</button>
+
+<p id="message"></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Age</th>
+      <th>Power ^</th>
+    </tr>
+  </thead>
+  <tbody id="dragonTable"></tbody>
+</table>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>

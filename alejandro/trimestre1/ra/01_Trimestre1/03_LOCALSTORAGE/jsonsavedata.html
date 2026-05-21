@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download JSON from localStorage</title>
+</head>
+<body>
+
+<h2>Download JSON stored in localStorage</h2>
+<button id="saveToFileButton">Download JSON</button>
+<button id="saveToFileButton2">Download All Local Storage</button>
+
+<script>
+
+/*
+To store a JSON string in a physical file from the browser using localStorage, it is not
+ possible to directly access the user's file system (for security reasons). However, you 
+ can allow the user to download a file containing the data stored 
+ in localStorage by using a technique that dynamically generates a file in the browser.
+*/
+
+// Example of a JSON object to store in localStorage
+const data = {
+    name: "John",
+    age: 30,
+    city: "Cáceres"
+};
+
+// Convert the object to a JSON string and store it in localStorage
+localStorage.setItem('myJson', JSON.stringify(data));
+
+// Function to download the JSON from localStorage
+document.getElementById('saveToFileButton').onclick = function() {
+    // Retrieve the JSON string from localStorage
+
+
+    const jsonString = localStorage.getItem('myJson');
+    //HOW CAN I DONWLOAD ALL THE DATA STORED IN LOCALSTORAGE AS A JSON FILE?
+
+    if (jsonString) {
+        // Create a Blob with the content of the JSON string
+        const blob = new Blob([jsonString], { type: "application/json" });
+
+        // Create a temporary link to download the file
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "data.json"; // File name
+
+        // Simulate a click on the link to start the download
+        link.click();
+
+        // Release the object URL after the download
+        URL.revokeObjectURL(link.href);
+    } else {
+        alert('No JSON data in localStorage');
+    }
+};
+
+// Function to download ALL the localStorage without variadic function
+/** document.getElementById('saveToFileButton2').onclick = function() {
+    // Retrieve all localStorage data
+    const allData = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        allData[key] = localStorage.getItem(key);
+    }
+
+    // Convert the object to a JSON stringconverts a JavaScript 
+    // value (object, array, number, boolean, or string) into a JSON-formatted string.
+
+    const jsonString = JSON.stringify(allData,null,2); // Pretty print with 2 spaces
+
+    // Create a Blob with the content of the JSON string
+    const blob = new Blob([jsonString], { type: "application/json" });
+
+    // Create a temporary link to download the file
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "all_local_storage.json"; // File name
+
+    // Simulate a click on the link to start the download
+    link.click();
+
+    // Release the object URL after the download
+    URL.revokeObjectURL(link.href);
+};
+**/
+
+//function to download all localStorage with a VARIADIC VERSION
+document.getElementById('saveToFileButton2').onclick = function() {
+  
+    // Retrieve all localStorage data
+    const allData = {};
+    allData={...localStorage}; //Spread operator to copy all key-value pairs from localStorage
+    const jsonString = JSON.stringify(allData, null, 2); // pretty output, no backslashes
+    // Create a Blob with the content of the JSON string
+    const blob = new Blob([jsonString], { type: "application/json" });
+    // Create a temporary link to download the file
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "all_local_storage.json"; // File name
+    // Simulate a click on the link to start the download
+    link.click();
+    // Release the object URL after the download
+    URL.revokeObjectURL(link.href); }
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+body{
+    background-color: aliceblue;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 95vh;
+}
+
+#calcForm{
+    width: 22vw;
+    height: 13vh;
+    align-content: center;
+}

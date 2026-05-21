@@ -1,0 +1,636 @@
+<!--
+----------------CHULETARIO EXAMEN-----------------
+---calculadoraMejorada.js
+
+//Creamos la funcion para la calculadora
+function calcular(){
+
+    //Recogemos los elementos de input
+    const input1 = document.getElementById("op1");
+    const input2 = document.getElementById("op2");
+
+    //Creamos las validaciones 
+    //1º No puede haber campos vacios
+    if(input1.value.trim() === "" || input2.value.trim() === ""){
+        window.alert("Rellene todos los campos");
+        return;
+    }
+    
+    //Convertimos a números
+    //value es para recoger los datos que escribe el usuario
+    // sin el value, hace referencia al HTML completo
+    const op1 = parseFloat(input1.value);  
+    const op2 = parseFloat(input2.value);  
+    
+
+    //2º Los campos deben ser numeros
+    if(isNaN(op1) || isNaN(op2)){
+        window.alert("Los campos deben ser numeros");
+        return;
+    }
+
+    //Recogemos la operación seleccionada
+    const form = document.getElementById("calcForm");
+    let operacion = form.elements["operation"].value;
+
+    //Almacenamos los datos en una variable
+    let resultado;
+
+    switch (operacion) {
+        case "suma":
+            resultado = op1 + op2;
+            break;
+        case "resta":
+            resultado = op1 - op2;
+            break;
+        case "multiplicacion":
+            resultado = op1 * op2;
+            break;
+        case "division":
+            if (op2 === 0) {
+                alert("¡No se puede dividir por cero!");
+                return;
+            }
+            resultado = op1 / op2;
+            break;
+    }
+
+    alert("Resultado: " + resultado);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+---ARRAY -> coches.js
+
+// FASE 1
+let cars = [];
+
+function add() {
+
+    // Esto es para recoger los valores de todos los campos del formulario, incluyendo category y fuel_type
+    const categoryElement = document.getElementById("category");
+    const selectedFuel = document.querySelector('input[name="fuel_type"]:checked'); 
+
+    const car = {
+        brand: document.getElementById("brand").value.trim(),
+        color: document.getElementById("color").value.trim(),
+        year: parseInt(document.getElementById("year").value), 
+        plate: document.getElementById("plate").value.trim(),
+        category: categoryElement ? categoryElement.value : "",
+        fuel_type: selectedFuel ? selectedFuel.value : "",
+        mot: document.getElementById("mot").checked
+    }
+    
+    // VALIDACIONES
+
+    // 1. Comprueba que ningún campo este vacío y que year sea un número válido
+    if (!car.brand || !car.color || !car.plate || !car.year || isNaN(car.year) || !car.category || !car.fuel_type) {
+        alert("All fields (Brand, Color, Year, Plate, Category, Fuel Type) must be filled, and Year must be a number.");
+        return; // Se detiene si hay un campo vacío o year no es un número válido
+    }
+
+    // 2. Utilizo el método some() para comprobar si ya existe un coche en el array con la misma matrícula
+    const plateExists = cars.some(existingCar => existingCar.plate === car.plate);
+    if (plateExists) {
+        window.alert("This plate is already registered. Please, check it.");
+        return; // Detenemos si es un duplicado
+    }
+
+    // 3. Comprobamos que brand y color no superen los 30 caracteres
+    if (car.brand.length > 30) {
+        window.alert("Brand must be at most 30 characters long");
+        return;
+    }
+
+    if (car.color.length > 30) { 
+        window.alert("Color must be at most 30 characters long");
+        return;
+    }
+
+    // Se añade el coche al array si pasa todas las validaciones
+    cars.push(car);
+
+    // Imprime el array actualizado por consola
+    console.log(cars);
+
+    // Reseteamos el formulario
+    document.getElementById("formulario").reset();  
+}
+
+/*----------------------------------------------------------------------------------------*/
+
+// FASE 2
+
+function show() {
+
+    // Aquí le damos el array a la funcioón y lo mostramos por pantalla en forma de lista
+    const lista = document.getElementById("lista-cars");
+    // Referencia a contador
+    const contador = document.getElementById("contador"); 
+
+    // Comprobamos que hay coches en la lista y que el elemento existe y si no, mostramos un mensaje
+    if (!lista) {
+        console.error("Error: Element with ID 'lista-cars' not found.");
+        return;
+    }
+    // Esto es para limpiar la lista antes de mostrar los coches
+    lista.innerHTML = "";
+
+    // Si no hay coche añadidos, mostramos un mensaje
+    if (cars.length === 0) {
+        lista.innerHTML = "<li>No cars added yet.</li>";
+        // Y actrualizamos el contador a 0
+        if (contador) {
+            contador.textContent = `Total cars: 0`;
+        }
+        return;
+    }
+
+    // Ordenar los coches alfabéticamente por la marca (brand)
+    const cochesOrdenados = [...cars].sort((a, b) => a.brand.localeCompare(b.brand));
+
+    // Itera sobre el array ordenado y crea un elemento de lista para cada coche con todos los datos
+    cochesOrdenados.forEach((car, index) => {
+        const item = document.createElement("li"); // Crea un elemento de lista
+        // Formatea el texto con todos los datos del coche
+        item.textContent = 
+            `${index + 1}. ${car.brand} (${car.color}, ${car.year}) ` +
+            `| Plate: ${car.plate} ` +
+            `| Category: ${car.category.toUpperCase()} ` +
+            `| Fuel: ${car.fuel_type.charAt(0).toUpperCase() + car.fuel_type.slice(1)} ` +
+            `| MOT: ${car.mot ? "Yes ✅" : "No ❌"}`;
+            
+        lista.appendChild(item); 
+    });
+
+    // Esto es para mostrar el número de coche añadidos
+    if (contador) {
+        contador.textContent = `Total cars: ${cars.length}`;
+    }
+}
+
+//--------------------------------------------------------------------------------------
+// FASE 3
+
+function deleteCar() {
+    const plateToDelete = prompt("Enter the plate of the car to delete:").trim(); // Pide al usuario la matrícula 
+    if (plateToDelete) {
+        const initialLength = cars.length;
+        // Filtramos el array, manteniendo solo los coches cuya matrícula NO coincida
+        cars = cars.filter(car => car.plate.toLowerCase() !== plateToDelete.toLowerCase()); 
+        
+        // Comprueba si se ha eliminado algún coche e imprime un mensaje de éxito o de error
+        if (cars.length < initialLength) {
+            alert(`Car with plate ${plateToDelete} deleted successfully.`);
+        } else {
+            alert(`Car with plate ${plateToDelete} not found.`);
+        }
+        
+        show();// Actualizamos la lista después de la eliminación
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+---ejercico 1 de practica
+
+function procesarDatosUsuario() {
+    
+    let name = prompt("Enter your name:");
+    let birthYearInput = prompt("Enter your year of birth (e.g., 1990):");
+    let country = prompt("Enter your country of residence:");
+
+    
+    const birthYear = parseInt(birthYearInput);
+    if (isNaN(birthYear) || birthYear < 1900) {
+        console.error("Invalid year of birth entered.");
+        alert("Please enter a valid year of birth.");
+        return;
+    }
+
+    
+    const currentYear = new Date().getFullYear();
+    const age = currentYear - birthYear;
+
+    
+    saludarYMostrarDatos(name, age, country);
+
+    
+    if (age >= 65) {
+        alert("¡Atención! Estás en edad de jubilación (65+). 👴");
+    } else {
+        alert("Aún te queda un tiempo para jubilarte. Sigue trabajando. 💪");
+    }
+}
+
+
+function saludarYMostrarDatos(nombre, edad, pais) {
+    const message = `Hello ${nombre}! You are approximately ${edad} years old and you live in ${pais}.`;
+
+    // Muestra en la consola (Requerimiento del ejercicio)
+    console.log("--- DATOS DEL USUARIO ---");
+    console.log(message);
+    console.log("-------------------------");
+
+    // Muestra en el DOM (en el elemento con id="datos-usuario")
+    const container = document.getElementById("datos-usuario");
+
+    if (container) {
+        container.innerHTML = `
+            <h3>¡Hola, ${nombre}!</h3>
+            <p>Tienes aproximadamente **${edad}** años.</p>
+            <p>Vives en **${pais}**.</p>
+        `;
+    } else {
+        console.error("Element with ID 'datos-usuario' not found in the HTML.");
+    }
+}
+
+procesarDatosUsuario();
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+----formulario
+
+<form id="formulario">
+    <label for="brand">Car brand:</label>
+    <input type="text" id="brand" name="brand" required><br><br>
+
+    <label for="color">Car color:</label>
+    <input type="text" id="color" name="color" required><br><br>
+
+    <label for="year">Car year:</label>
+    <input type="number" id="year" name="year" min="2000" max="2025" required><br><br>
+
+    <label for="plate">Car plate:</label>
+    <input type="text" id="plate" name="plate" required><br><br>
+
+    <label for="category">Category:</label>
+    <select id="category" name="category" required>
+        <option value="" disabled selected>Select a category</option>
+        <option value="sedan">Sedan</option>
+        <option value="suv">SUV</option>
+        <option value="truck">Truck</option>
+        <option value="coupe">Coupe</option>
+        <option value="other">Other</option>
+    </select><br><br>
+
+    <label>Fuel type:</label><br>
+    <input type="radio" id="gasoline" name="fuel_type" value="gasoline" required>
+    <label for="gasoline">Gasoline</label><br>
+    <input type="radio" id="electric" name="fuel_type" value="electric">
+    <label for="electric">Electric</label><br><br>
+
+    <label for="mot">MOT in force:</label>
+    <input type="checkbox" id="mot" name="mot"><br><br>
+
+    <button type="button" onclick="add()">Add</button>
+    <button type="button" onclick="show()">Show Cars</button>
+    <button type="button" onclick="deleteCar()">Delete Car</button>
+</form>
+ 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+-----
+
+function calcularEnvio(){
+    //Recogemos los datos del formulario y lo guardamos en un array
+    const peso = parseFloat(document.getElementById("peso").value);
+    const zona = document.getElementById("zona").value;
+
+    if (isNaN(peso)) {
+        alert("El peso introducido no es un número válido.");
+        return;
+    }
+
+    const array = [peso, zona];
+
+    console.log(array);
+
+    //Validaciones
+
+    if(peso <= 0){
+        alert("El peso no es válido");
+        return;
+    }
+
+    if(zona === ""){
+        alert("El campo zona no puede estar vacio");
+        return;
+    }
+
+    //Coste segun la zona
+    let costeBase;
+
+    switch(zona){
+        case "local":
+            costeBase = 5;
+            break;
+        case "nacional":
+            costeBase = 15;
+            break;
+        case "internacional":
+            costeBase =20;
+            break;
+        default:
+            alert("Zona no reconocida. Por favor, revise la selección.");
+            return;
+    }
+
+    //Coste final
+    const recargoPorPeso = 1.5 * peso; // 1.5€ por cada kg
+    const costoFinal = costeBase + recargoPorPeso;
+
+    // 5. Mostrar el resultado
+    console.log("--- CÁLCULO DE ENVÍO ---");
+    console.log(`Peso: ${peso} kg`);
+    console.log(`Zona: ${zona.toUpperCase()}`);
+    console.log(`Costo Base: ${costeBase} €`);
+    console.log(`Recargo por peso: ${recargoPorPeso.toFixed(2)} €`);
+    console.log(`Costo Final: ${costoFinal.toFixed(2)} €`); // toFixed(2) para 2 decimales
+    console.log("------------------------");
+    
+    alert(`El costo final del envío a la zona ${zona.toUpperCase()} con ${peso} kg es: ${costoFinal.toFixed(2)} €`);
+
+    // Opcional: Mostrar resultado en un elemento del DOM
+    const resultadoDiv = document.getElementById("resultado-envio");
+    if (resultadoDiv) {
+        resultadoDiv.innerHTML = `El **costo final** es de **${costoFinal.toFixed(2)} €** (Base: ${costeBase}€ + Recargo: ${recargoPorPeso.toFixed(2)}€)`;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+---calcularPromedioVentas
+
+function calcularPromedioVentas(){
+
+    //Recogemos los valores del formulario, los guardamos en un array y los mostaramos
+    const mes1 = parseFloat(document.getElementById("mes1").value);
+    const mes2 = parseFloat(document.getElementById("mes2").value);
+    const mes3 = parseFloat(document.getElementById("mes3").value);
+    const mes4 = parseFloat(document.getElementById("mes4").value);
+    const mes5 = parseFloat(document.getElementById("mes5").value);
+
+    let array = [mes1,mes2,mes3,mes4,mes5];
+
+    suma= 0;
+
+    //Validaciones
+
+    for(let i = 0; i<array.length; i++){
+        if(array[i] < 0 ){
+            alert("Los numeros deben ser positivos");
+            return;
+        };
+
+        if(isNaN(array[i])){
+            alert("Los valores deben ser numeros");
+            return;
+        }
+
+        suma += array[i];
+    }
+    
+    console.log(array);
+    alert("El resultado de la suma es: " + suma);
+   
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+---APIs 
+
+----------------------------1º-----------------------------------------------
+
+fetch('https://api.open-meteo.com/v1/forecast?latitude=39.4765&longitude=-6.3722&hourly=temperature_2m,relative_humidity_2m&timezone=auto&forecast_days=1')
+    .then(response => response.json())
+    .then(json => {
+        printClimate(json)
+    });
+
+/*
+EXPLICACIÓN 1ª PARTE:
+
+**1. fetch() 
+- Hace la petición a la API
+- Devuelve una "promesa" (una "promesa de que los datos llegarán")
+
+**2. .then(response => response.json())
+- then(): significa que "cuando termines, haz esto"
+- response => response.json(): recibe la respuesta "response" y la convierte a json
+- =>: fución flecha
+
+**3. .then(json => {printClimate(json)});
+- then(): significa que "cuando termines, haz esto"
+- json => {printClimate(json)}: cuando el json este listo, ejecuta la función printClimate
+                                el json contiene todos los datos del clima
+- =>: fución flecha
+*/
+
+function printClimate(data){ //data es como la caja que almacena la información
+
+    const container = document.getElementById('container')
+
+    //Para obtener los datos del 'data'
+    const latitude = data.latitude;
+    const longitude = data.longitude;
+    const horaactual = new Date().getHours();
+    const temperature = data.hourly.temperature_2m[horaactual + 2];
+
+    //Para mostrar los datos
+    container.innerHTML = `
+        <p>
+            <strong>Ubicación:</strong>
+            <br>Latitude: ${latitude}
+            <br>Longitude: ${longitude}
+            <br><strong>Clima actual (${horaactual} horas):</strong>
+            Temperature: ${temperature}°C
+        </p>
+    `;
+}
+
+----------------------------2º-----------------------------------------------
+
+fetch('https://jsonplaceholder.typicode.com/todos/')
+    .then(response => response.json())
+    .then(json => {
+        printTareas(json)
+    });
+
+function printTareas(data){
+
+    let container = document.getElementById("user");
+
+    data.forEach(tarea => {
+        container.innerHTML += `
+            <p>
+                <br>Usuario: ${tarea.userId}
+                <br>Título: ${tarea.title}
+            </p>
+
+        `;
+    });
+    
+}
+
+----------------------------3º-----------------------------------------------
+
+//Muestra el id y el titulo del usuario 10
+
+fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(response => response.json())
+    .then(json => {
+        printIdTitulo(json)
+    });
+
+function printIdTitulo(data){
+
+    const resultado = document.getElementById('container');
+
+    for(i=0; i<data.length; i++){
+        const r = data[i];
+
+        if(r.userId === 10){
+            resultado.innerHTML += `
+            <p>
+                id: ${r.id}
+                <br>title: ${r.title}
+            </p>
+        `;
+        }
+    }
+}
+
+----------------------------4º-----------------------------------------------
+
+//Muestra los 10 primeros posts
+
+fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(response => response.json())
+    .then(json => {
+        print10post(json)
+    });
+
+function print10post(data){
+
+    const resultado = document.getElementById('container');
+
+    for(let i=0; i<10; i++){
+        const post = data[i];
+
+        resultado.innerHTML += `
+            <p>
+                userID: ${post.userId}
+                <br> id: ${post.id}
+                <br> title: ${post.title}
+                <br> body: ${post.body}
+            </p>
+        `;
+    }
+}
+
+----------------------------4º-----------------------------------------------
+
+// Muestra todos los posts pero con el título en MAYÚSCULAS.
+
+fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(response => response.json())
+    .then(json => {
+        printTituloMayus(json)
+    });
+
+function printTituloMayus(data){
+
+    const resultado = document.getElementById('container');
+
+    for(i=0; i<data.length; i++){
+        const m = data[i];
+
+        resultado.innerHTML += `
+            <p>
+                <br>Post: ${m.userId}
+                <br>Title: ${m.title.toUpperCase()}
+            </p>
+        `;
+    }
+
+}
+
+----------------------------5º-----------------------------------------------
+
+//Muestra cuántos posts tiene cada usuario (del 1 al 10).
+fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(response => response.json())
+    .then(json => {
+        print10post(json)
+    });
+
+function print10post(data){
+
+    const resultado = document.getElementById('container');
+
+    const contador = {};
+
+    for(let i=0; i<data.length; i++){
+        const r = data[i];
+        const userId = r.userId;
+
+        if(contador[userId]){
+            contador[userId]++;
+        }else{
+            contador[userId] = 1;
+        }
+    }
+
+    for(let usuario = 1; usuario <= 10; usuario++){
+        resultado.innerHTML += `
+            <p>
+                Usuario ${usuario}: ${contador[usuario]} posts
+            </p>
+        `;
+    }
+}
+
+----------------------------6º-----------------------------------------------
+
+//Muetra un post aleatorio
+fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(response => response.json())
+    .then(json => {
+        printRandom(json)
+    });
+
+function printRandom(data){
+
+    const resultado = document.getElementById('container');
+
+    for(let i=0; i<1; i++){
+        const numRamdom = Math.floor(Math.random() * data.length)
+
+        const r = data[numRamdom];
+
+         resultado.innerHTML += `
+            <div>
+                <h3>Post #${r.id}</h3>
+                <p><strong>Usuario:</strong> ${r.userId}</p>
+                <p><strong>Título:</strong> ${r.title}</p>
+                <p><strong>Contenido:</strong> ${r.body}</p>
+                <hr>
+            </div>
+        `;
+    }
+}
+-->

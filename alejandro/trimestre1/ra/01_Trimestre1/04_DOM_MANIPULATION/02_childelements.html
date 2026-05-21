@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS Get Child Elements</title>
+</head>
+<body>
+  
+  <ul id="menu">  
+    <li class="first">Home</li>
+    <li>Products</li>
+    <li class="current">Customer Support</li>
+    <li>Careers</li>
+    <li>Investors</li>
+    <li>News</li>
+    <li class="last">About Us</li>
+  </ul>
+</body>
+<script>
+    //To get the first child element of a specified element
+    //If the parentElement does not have any child element, the firstChild returns null.
+    //The firstChild property returns a child node which can be any node 
+    // type such as an element node, a text node, or a comment node
+    //let firstChild = parentElement.firstChild; 
+
+    const nodomenu=document.getElementById('menu');
+   // 01 To get the node name of a specified element
+    let name = nodomenu.nodeName;
+    console.log(`01 ${name}`);
+    
+    // 02 To get the first child element of a specified element
+    let content = nodomenu.firstElementChild;
+    console.log(`02 ${content}`);
+
+    //03 To get the last child element of a specified element
+    //In case the parentElement does not have any child element, the lastChild returns null.
+    let lastElement = nodomenu.lastChild;
+    console.log(`03 ${lastElement}`);
+    //The lastChild property returns the last element node, text node, or comment node. 
+    // If you want to select only the last child element with the element node type,
+    //  you use the lastElementChild property
+    let lastElementF =nodomenu.lastElementChild;
+    console.log(`04 ${lastElementF}`);
+
+    //05 To get all child elements of a specified element
+    let allChildren = nodomenu.children;
+    console.log(`05 ${allChildren}`);
+    //The children property returns a live HTMLCollection of child elements of the
+    // specified element. It does not return text nodes and comment nodes.
+    //If the specified element has no child elements, the children property returns an empty collection.
+    for(let i=0;i<allChildren.length;i++){
+        console.log(`06 ${allChildren[i]}`);
+    } 
+
+
+  </script>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONCESIONARIO</title>
+    <link rel="stylesheet" href="coches.css">
+    <script src="coches.js" defer></script>
+</head>
+<body>
+    <h1 class="titulo">DEALER IN JAVASCRIPT</h1>
+
+    <div class="cont-general">
+        <!--contenedor de la izquierda-->
+        <div class = "cont-izquierda">
+
+            <h1 class="titulo-formulario">FILL THE FORM</h1>
+                <div class="cont-pequeño-formulario">
+                    <form id="formulario">
+                        <label for="brand">Car brand:</label>
+                        <input type="text" id="brand" name="brand" required><br><br>
+                
+                        <label for="color">Car color:</label>
+                        <input type="text" id="color" name="color" required><br><br>
+                
+                        <label for="year">Car year:</label>
+                        <input type="number" id="year" name="year" min="2000" max="2025" required><br><br>
+                
+                        <label for="plate">Car plate:</label>
+                        <input type="text" id="plate" name="plate" required><br><br>
+                
+                        <label for="category">Category:</label>
+                        <select id="category" name="category" required>
+                            <option value="" disabled selected>Select a category</option>
+                            <option value="sedan">Sedan</option>
+                            <option value="suv">SUV</option>
+                            <option value="truck">Truck</option>
+                            <option value="coupe">Coupe</option>
+                            <option value="other">Other</option>
+                        </select><br><br>
+                
+                        <label>Fuel type:</label><br>
+                        <input type="radio" id="gasoline" name="fuel_type" value="gasoline" required>
+                        <label for="gasoline">Gasoline</label><br>
+                        <input type="radio" id="electric" name="fuel_type" value="electric">
+                        <label for="electric">Electric</label><br><br>
+                
+                        <label for="mot">MOT in force:</label>
+                        <input type="checkbox" id="mot" name="mot"><br><br>
+                
+                        <button type="button" onclick="add()">Add</button>
+                        <button type="button" onclick="show()">Show Cars</button>
+                        <button type="button" onclick="deleteCar()">Delete Car</button>
+                    </form>
+                </div>
+
+        </div>
+
+        <!--Separador-->
+        <div class="separador"></div>
+
+        <!--contenedor de la derecha-->
+        <div class="cont-derecha">
+        
+            <h1 class="titulo-lista">CAR LIST</h1>
+        
+            <div class="cont-pequeño-lista" id="lista-coches">
+                
+                <ul id="lista-cars">
+
+                </ul>
+                <div id="contador"></div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+</body>
+</html>

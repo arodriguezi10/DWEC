@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      margin: 0;
+      height: 100vh;
+      justify-content: center;
+    }
+
+    main {
+      display: flex;
+      gap: 20px;
+    }
+
+    #div1, #div2 {
+      width: 150px;
+      height: 150px;
+      border: 2px solid black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+    }
+
+    img {
+      width: 50px;
+      cursor: grab;
+    }
+  </style>
+  <script>
+    // Permite que un div sea un destino válido para soltar
+    function allowDrop(ev) {
+      ev.preventDefault(); // Previene el comportamiento por defecto (p. ej. abrir la imagen)
+    }
+
+    // Función que se ejecuta al empezar a arrastrar la imagen
+    function drag(ev) {
+      // Guarda información temporal en dataTransfer
+      // "text" indica el tipo de dato
+      // ev.target.id es el id del elemento arrastrado (por ejemplo, "drag1")
+      // Esto permite identificar qué elemento se está moviendo
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    // Función que se ejecuta al soltar la imagen sobre un div
+    function soltar(ev) {
+      ev.preventDefault(); // Previene el comportamiento por defecto
+
+      // Recupera la información guardada en el drag
+      // Debe ser el mismo tipo que se usó en setData ("text")
+      var data = ev.dataTransfer.getData("text"); // en data tengo el id del elemento arrastrado
+
+      // Con la id recuperada, seleccionamos el elemento en el DOM
+      var draggedElement = document.getElementById(data);
+
+      // Añade el elemento arrastrado como hijo del div donde se soltó
+      // ev.currentTarget es el div que recibió el drop
+      ev.currentTarget.appendChild(draggedElement);
+    }
+  </script>
+</head>
+<body>
+  <main>
+    <!-- Contenedores de destino donde se puede soltar la imagen -->
+    <div id="div1" ondrop="soltar(event)" ondragover="allowDrop(event)"></div>
+    <div id="div2" ondrop="soltar(event)" ondragover="allowDrop(event)"></div>
+  </main>
+
+  <footer>
+    <!-- Imagen que se puede arrastrar -->
+    <img id="drag1" src="icono.jpg" draggable="true" ondragstart="drag(event)">
+  </footer>
+</body>
+</html>

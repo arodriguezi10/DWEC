@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivial Quesitos - 2 Jugadores</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Trivial</h1>
+
+    <div id="pantalla-bienvenida" class="pantalla activa">
+        <h2>Modo 2 Jugadores Local</h2>
+        <div class="form-grupo">
+            <p>Introduce los nombres para empezar:</p>
+            <input type="text" id="nombre-j1" placeholder="Jugador 1 (Azul)" maxlength="15" style="border: 2px solid #3498db; margin-bottom: 10px;">
+            <br>
+            <input type="text" id="nombre-j2" placeholder="Jugador 2 (Rojo)" maxlength="15" style="border: 2px solid #e74c3c;">
+        </div>
+        <button id="btn-empezar-juego">Comenzar Partida</button>
+    </div>
+
+    <div id="panel-progreso" class="oculto">
+        <h2 id="indicador-turno" style="margin-bottom: 15px;">Turno de: ---</h2>
+        
+        <div style="display: flex; justify-content: space-around; gap: 10px;">
+            <div id="panel-j1" style="border: 3px solid #3498db; padding: 10px; border-radius: 10px; width: 45%;">
+                <h3 id="info-j1" style="color: #3498db;">J1 | 0 pts</h3>
+                <div class="marcador-quesitos">
+                    <div class="pizza-base"></div>
+                    <div class="quesito" id="q-Geografía-j1" title="Geografía"></div>
+                    <div class="quesito" id="q-Historia-j1" title="Historia"></div>
+                    <div class="quesito" id="q-Ciencia-j1" title="Ciencia"></div>
+                    <div class="quesito" id="q-Arte-j1" title="Arte y Literatura"></div>
+                    <div class="quesito" id="q-Deportes-j1" title="Deportes"></div>
+                    <div class="quesito" id="q-Entretenimiento-j1" title="Entretenimiento"></div>
+                </div>
+            </div>
+
+            <div id="panel-j2" style="border: 3px solid #e74c3c; padding: 10px; border-radius: 10px; width: 45%;">
+                <h3 id="info-j2" style="color: #e74c3c;">J2 | 0 pts</h3>
+                <div class="marcador-quesitos">
+                    <div class="pizza-base"></div>
+                    <div class="quesito" id="q-Geografía-j2" title="Geografía"></div>
+                    <div class="quesito" id="q-Historia-j2" title="Historia"></div>
+                    <div class="quesito" id="q-Ciencia-j2" title="Ciencia"></div>
+                    <div class="quesito" id="q-Arte-j2" title="Arte y Literatura"></div>
+                    <div class="quesito" id="q-Deportes-j2" title="Deportes"></div>
+                    <div class="quesito" id="q-Entretenimiento-j2" title="Entretenimiento"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pantalla-inicio" class="pantalla">
+        <h2 id="titulo-ruleta">Gira para tu siguiente pregunta</h2>
+        
+        <div class="form-grupo">
+            <div id="wrapper-ruleta">
+                <div id="flecha-ruleta">v</div>
+                <canvas id="canvas-ruleta" width="350" height="350"></canvas>
+            </div>
+        </div>
+
+        <div class="form-grupo">
+            <h3 id="tema-seleccionado">Tema: ---</h3>
+        </div>
+        
+        <button id="btn-girar">Girar Ruleta</button>
+        <button id="btn-empezar" style="display: none;">Ir a la pregunta</button>
+    </div>
+
+    <div id="pantalla-juego" class="pantalla">
+        <div id="aviso-quesito" style="display: none;">
+            <span class="badge">PREGUNTA DE QUESITO</span>
+        </div>
+        
+        <h3 id="texto-tiempo">Tiempo: 30 seg</h3>
+        
+        <div id="contenedor-pregunta">
+            <h2 id="texto-pregunta">Cargando...</h2>
+            <div id="contenedor-opciones"></div>
+        </div>
+        
+        <div id="resultado"></div>
+        <button id="siguiente-btn" style="display: none;">Continuar</button>
+    </div>
+
+    <div id="pantalla-resultados" class="pantalla">
+        <h2 style="color: #f39c12;">FIN DE LA PARTIDA</h2>
+        <h3 id="texto-puntuacion">Procesando resultados...</h3>
+        
+        <div id="seccion-registro">
+            <button id="btn-guardar-record">Guardar Récords</button>
+        </div>
+
+        <div id="seccion-ranking" style="display: none; margin-top: 20px; border-top: 2px solid #eee; padding-top: 15px;">
+            <h3>Ranking Global</h3>
+            <div id="lista-ranking" style="text-align: left; max-width: 300px; margin: 0 auto;"></div>
+        </div>
+
+        <button id="btn-reiniciar" style="margin-top: 30px;">Nueva Partida</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
