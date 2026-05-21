@@ -1,0 +1,6 @@
+[submodule "raquel"]
+	path = raquel
+	url = https://github.com/rporti/01_Trimestre1.git
+[submodule "raquel/01_Trimestre1"]
+	path = raquel/01_Trimestre1
+	url = https://github.com/rporti/01_Trimestre1.git
