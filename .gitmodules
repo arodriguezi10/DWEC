@@ -4,3 +4,6 @@
 [submodule "raquel/01_Trimestre1"]
 	path = raquel/01_Trimestre1
 	url = https://github.com/rporti/01_Trimestre1.git
+[submodule "raquel/02_Trimestre2"]
+	path = raquel/02_Trimestre2
+	url = https://github.com/rporti/02_Trimestre.git
