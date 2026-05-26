@@ -81,10 +81,10 @@ app.post("/questions", (req, res) => {
 // --- NUEVO ENDPOINT: REGISTRO DE PUNTUACIÓN ---
 app.post("/puntuacion", (req, res) => {
   try {
-    const { nombre, puntos } = req.body;
+    const { nombre, puntos, quesitos } = req.body;
 
     // 1. Validación de seguridad básica
-    if (!nombre || puntos === undefined) {
+    if (!nombre || puntos === undefined ||quesitos === undefined) {
       return res.status(400).json({ error: "Datos incompletos: Se requiere 'nombre' y 'puntos'." });
     }
 
@@ -92,6 +92,7 @@ app.post("/puntuacion", (req, res) => {
     const nuevoRegistro = {
       nombre: nombre,
       puntos: puntos,
+      quesitos: quesitos,
       fecha: new Date().toLocaleDateString() // Añadimos la fecha como extra útil
     };
 

@@ -94,8 +94,8 @@ async function iniciarPartida() {
         return;
     }
 
-    jugadores[0] = { id: 'j1', nombre: n1, puntos: 0, quesitos: new Set(), aciertos: {} };
-    jugadores[1] = { id: 'j2', nombre: n2, puntos: 0, quesitos: new Set(), aciertos: {} };
+    jugadores[0] = { id: 'j1', nombre: n1, puntos: 0, quesitos: new Set(), aciertos: 0 };
+    jugadores[1] = { id: 'j2', nombre: n2, puntos: 0, quesitos: new Set(), aciertos: 0 };
     turnoActual = 0;
 
     document.querySelectorAll('.quesito').forEach(q => q.classList.remove('obtenido'));
@@ -112,8 +112,10 @@ function actualizarInterfazMarcadores() {
     indicadorTurno.textContent = `Turno de: ${jugadorActivo.nombre}`;
     indicadorTurno.style.color = turnoActual === 0 ? '#3498db' : '#e74c3c';
 
-    infoJ1.textContent = `${jugadores[0].nombre} | ${jugadores[0].puntos} pts`;
-    infoJ2.textContent = `${jugadores[1].nombre} | ${jugadores[1].puntos} pts`;
+
+    // aqui 
+    infoJ1.textContent = `${jugadores[0].nombre} | ${jugadores[0].puntos} pts  | ${jugadores[0].aciertos}`;
+    infoJ2.textContent = `${jugadores[1].nombre} | ${jugadores[1].puntos} pts  | ${jugadores[1].aciertos}`;
 
     if (turnoActual === 0) {
         panelJ1.style.opacity = "1";
@@ -221,8 +223,8 @@ async function cargarNuevaPregunta() {
     const jugadorActivo = jugadores[turnoActual];
     let aciertos = jugadorActivo.aciertos[categoriaSeleccionada] || 0;
     
-    if (aciertos >= 3 && !jugadorActivo.quesitos.has(categoriaSeleccionada)) {
-        esPreguntaDeQuesito = Math.random() > 0.5;
+    if (aciertos >= 1 && !jugadorActivo.quesitos.has(categoriaSeleccionada)) {
+        esPreguntaDeQuesito = Math.random() > 1;
     } else {
         esPreguntaDeQuesito = false;
     }
@@ -295,9 +297,13 @@ async function verificarRespuesta(opcion) {
             jugadorActivo.puntos += 50;
             jugadorActivo.quesitos.add(categoriaSeleccionada);
             
-            const prefijoTema = categoriaSeleccionada === 'Arte y Literatura' ? 'Arte' : categoriaSeleccionada;
+            const prefijoTema = categoriaSeleccionada === 'Arte y Literatura' ? 'Arte' : categoriaSeleccionada; ///??????
             const idHtml = `q-${prefijoTema}-${jugadorActivo.id}`;
             document.getElementById(idHtml)?.classList.add('obtenido');
+            window.alert(jugadorActivo.quesitos.size);
+            jugadorActivo.aciertos = jugadorActivo.quesitos.size;
+
+
         } else {
             jugadorActivo.aciertos[categoriaSeleccionada] = (jugadorActivo.aciertos[categoriaSeleccionada] || 0) + 1;
         }
@@ -333,8 +339,8 @@ function finalizarPartida(ganador) {
     panelProgreso.classList.add('oculto');
     
     textoPuntuacion.innerHTML = `
-        Gana: <strong>${ganador.nombre}</strong> con ${ganador.puntos} puntos.<br>
-        Segundo lugar: ${jugadores[(turnoActual + 1) % 2].nombre} con ${jugadores[(turnoActual + 1) % 2].puntos} puntos.
+        Gana: <strong>${ganador.nombre}</strong> con ${ganador.puntos} puntos y ${ganador.quesitos} quesitos.<br>
+        Segundo lugar: ${jugadores[(turnoActual + 1) % 2].nombre} con ${jugadores[(turnoActual + 1) % 2].puntos}puntos y ${jugadores[(turnoActual+1)%2].quesitos} quesitos.
     `;
     
     seccionRegistro.style.display = 'block';
@@ -350,14 +356,14 @@ async function guardarRecordsMultijugador() {
         await fetch(`${urlApi}/puntuacion`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre: jugadores[0].nombre, puntos: jugadores[0].puntos })
+            body: JSON.stringify({ nombre: jugadores[0].nombre, puntos: jugadores[0].puntos, quesitos: jugadores[0].quesitos })
         });
         
         // Guardamos los puntos del Jugador 2 y recibimos el ranking con esa respuesta
         const res2 = await fetch(`${urlApi}/puntuacion`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre: jugadores[1].nombre, puntos: jugadores[1].puntos })
+            body: JSON.stringify({ nombre: jugadores[1].nombre, puntos: jugadores[1].puntos, quesitos: jugadores[1].quesitos })
         });
         
         const data = await res2.json();
@@ -373,5 +379,5 @@ async function guardarRecordsMultijugador() {
 
 function mostrarRanking(ranking) {
     seccionRanking.style.display = 'block';
-    listaRanking.innerHTML = '<ol>' + ranking.map(r => `<li>${r.nombre}: ${r.puntos} pts</li>`).join('') + '</ol>';
+    listaRanking.innerHTML = '<ol>' + ranking.map(r => `<li>${r.nombre}: ${r.puntos}: ${r.quesitos} pts</li>`).join('') + '</ol>';
 }

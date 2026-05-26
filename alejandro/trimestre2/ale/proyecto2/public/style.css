@@ -104,6 +104,7 @@ button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
 #q-Arte-j1, #q-Arte-j2 { background-color: #9b59b6; clip-path: polygon(50% 50%, 50% 100%, 6.7% 75%); }
 #q-Deportes-j1, #q-Deportes-j2 { background-color: #2ecc71; clip-path: polygon(50% 50%, 6.7% 75%, 6.7% 25%); }
 #q-Entretenimiento-j1, #q-Entretenimiento-j2 { background-color: #1abc9c; clip-path: polygon(50% 50%, 6.7% 25%, 50% 0%); }
+#q-Videojuegos-j1, #q-Videojuegos-j2 { background-color: #1e0e35; clip-path: polygon(50% 50%, 6.7% 75%, 6.7% 75%); }
 
 .quesito.obtenido { opacity: 1; }
 
