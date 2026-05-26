@@ -18,7 +18,7 @@ let tiempoRestante = 30;
 let anguloActual = 0;
 let velocidadGiro = 0;
 let ruletaGirando = false;
-const coloresRuleta = ["#f39c12", "#e74c3c", "#3498db", "#9b59b6", "#2ecc71", "#1abc9c"];
+const coloresRuleta = ["#f39c12", "#e74c3c", "#3498db", "#9b59b6", "#2ecc71", "#1abc9c", "#1e0e35"];
 
 // Pantallas
 const pantallaBienvenida = document.getElementById('pantalla-bienvenida');
@@ -94,16 +94,17 @@ async function iniciarPartida() {
         return;
     }
 
-    jugadores[0] = { id: 'j1', nombre: n1, puntos: 0, quesitos: new Set(), aciertos: 0 };
-    jugadores[1] = { id: 'j2', nombre: n2, puntos: 0, quesitos: new Set(), aciertos: 0 };
+    // Aciertos debe ser un objeto {} para guardar rachas por categoría
+    jugadores[0] = { id: 'j1', nombre: n1, puntos: 0, quesitos: new Set(), aciertos: {} };
+    jugadores[1] = { id: 'j2', nombre: n2, puntos: 0, quesitos: new Set(), aciertos: {} };
     turnoActual = 0;
 
     document.querySelectorAll('.quesito').forEach(q => q.classList.remove('obtenido'));
     
     panelProgreso.classList.remove('oculto');
-    actualizarInterfazMarcadores();
-
+    
     await cargarCategorias();
+    actualizarInterfazMarcadores();
     prepararSiguienteTurno();
 }
 
@@ -112,10 +113,9 @@ function actualizarInterfazMarcadores() {
     indicadorTurno.textContent = `Turno de: ${jugadorActivo.nombre}`;
     indicadorTurno.style.color = turnoActual === 0 ? '#3498db' : '#e74c3c';
 
-
-    // aqui 
-    infoJ1.textContent = `${jugadores[0].nombre} | ${jugadores[0].puntos} pts  | ${jugadores[0].aciertos}`;
-    infoJ2.textContent = `${jugadores[1].nombre} | ${jugadores[1].puntos} pts  | ${jugadores[1].aciertos}`;
+    // Se muestran los puntos y la cantidad de quesitos (tamaño del Set)
+    infoJ1.textContent = `${jugadores[0].nombre} | ${jugadores[0].puntos} pts | ${jugadores[0].quesitos.size} Quesitos`;
+    infoJ2.textContent = `${jugadores[1].nombre} | ${jugadores[1].puntos} pts | ${jugadores[1].quesitos.size} Quesitos`;
 
     if (turnoActual === 0) {
         panelJ1.style.opacity = "1";
@@ -223,8 +223,9 @@ async function cargarNuevaPregunta() {
     const jugadorActivo = jugadores[turnoActual];
     let aciertos = jugadorActivo.aciertos[categoriaSeleccionada] || 0;
     
-    if (aciertos >= 1 && !jugadorActivo.quesitos.has(categoriaSeleccionada)) {
-        esPreguntaDeQuesito = Math.random() > 1;
+    // Si tiene 2 aciertos y aún no tiene el quesito, 75% de probabilidad
+    if (aciertos >= 2 && !jugadorActivo.quesitos.has(categoriaSeleccionada)) {
+        esPreguntaDeQuesito = Math.random() <= 0.75; 
     } else {
         esPreguntaDeQuesito = false;
     }
@@ -287,7 +288,7 @@ async function verificarRespuesta(opcion) {
             resultado.textContent = fueCorrecta ? "Correcto" : `Incorrecto. Era: ${data.respuestaCorrecta}`;
             resultado.style.color = fueCorrecta ? "green" : "red";
         } catch (e) {
-            resultado.textContent = "Error de validacion.";
+            resultado.textContent = "Error de validación.";
         }
     }
 
@@ -297,17 +298,19 @@ async function verificarRespuesta(opcion) {
             jugadorActivo.puntos += 50;
             jugadorActivo.quesitos.add(categoriaSeleccionada);
             
-            const prefijoTema = categoriaSeleccionada === 'Arte y Literatura' ? 'Arte' : categoriaSeleccionada; ///??????
+            // Si consigue el quesito, su racha en esa categoría se reinicia a 0
+            jugadorActivo.aciertos[categoriaSeleccionada] = 0; 
+            
+            const prefijoTema = categoriaSeleccionada === 'Arte y Literatura' ? 'Arte' : categoriaSeleccionada;
             const idHtml = `q-${prefijoTema}-${jugadorActivo.id}`;
             document.getElementById(idHtml)?.classList.add('obtenido');
-            window.alert(jugadorActivo.quesitos.size);
-            jugadorActivo.aciertos = jugadorActivo.quesitos.size;
-
-
+            
         } else {
+            // Sumar a la racha
             jugadorActivo.aciertos[categoriaSeleccionada] = (jugadorActivo.aciertos[categoriaSeleccionada] || 0) + 1;
         }
     } else {
+        // Fallar la pregunta reinicia a 0 la racha de esa categoría
         jugadorActivo.aciertos[categoriaSeleccionada] = 0;
     }
 
@@ -318,7 +321,7 @@ async function verificarRespuesta(opcion) {
 function manejarSiguienteAccion() {
     const jugadorActivo = jugadores[turnoActual];
 
-    // Verificar si el jugador actual ha ganado
+    // Verificar si el jugador actual ha ganado al conseguir todas las categorías existentes
     if (jugadorActivo.quesitos.size >= categorias.length) {
         finalizarPartida(jugadorActivo);
     } else {
@@ -338,9 +341,12 @@ function finalizarPartida(ganador) {
     cambiarPantalla(pantallaResultados);
     panelProgreso.classList.add('oculto');
     
+    const perdedor = jugadores[(turnoActual + 1) % 2];
+    
     textoPuntuacion.innerHTML = `
-        Gana: <strong>${ganador.nombre}</strong> con ${ganador.puntos} puntos y ${ganador.quesitos} quesitos.<br>
-        Segundo lugar: ${jugadores[(turnoActual + 1) % 2].nombre} con ${jugadores[(turnoActual + 1) % 2].puntos}puntos y ${jugadores[(turnoActual+1)%2].quesitos} quesitos.
+        🏆 ¡Gana: <strong>${ganador.nombre}</strong>!<br>
+        Puntos: ${ganador.puntos} | Quesitos conseguidos: ${ganador.quesitos.size}<br><br>
+        Segundo lugar: ${perdedor.nombre} con ${perdedor.puntos} puntos y ${perdedor.quesitos.size} quesitos.
     `;
     
     seccionRegistro.style.display = 'block';
@@ -352,18 +358,24 @@ async function guardarRecordsMultijugador() {
     btnGuardarRecord.disabled = true;
     
     try {
-        // Guardamos los puntos del Jugador 1
         await fetch(`${urlApi}/puntuacion`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre: jugadores[0].nombre, puntos: jugadores[0].puntos, quesitos: jugadores[0].quesitos })
+            body: JSON.stringify({ 
+                nombre: jugadores[0].nombre, 
+                puntos: jugadores[0].puntos, 
+                quesitos: jugadores[0].quesitos.size 
+            })
         });
         
-        // Guardamos los puntos del Jugador 2 y recibimos el ranking con esa respuesta
         const res2 = await fetch(`${urlApi}/puntuacion`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre: jugadores[1].nombre, puntos: jugadores[1].puntos, quesitos: jugadores[1].quesitos })
+            body: JSON.stringify({ 
+                nombre: jugadores[1].nombre, 
+                puntos: jugadores[1].puntos, 
+                quesitos: jugadores[1].quesitos.size 
+            })
         });
         
         const data = await res2.json();
@@ -379,5 +391,5 @@ async function guardarRecordsMultijugador() {
 
 function mostrarRanking(ranking) {
     seccionRanking.style.display = 'block';
-    listaRanking.innerHTML = '<ol>' + ranking.map(r => `<li>${r.nombre}: ${r.puntos}: ${r.quesitos} pts</li>`).join('') + '</ol>';
+    listaRanking.innerHTML = '<ol>' + ranking.map(r => `<li>${r.nombre}: ${r.puntos} pts (${r.quesitos} quesitos)</li>`).join('') + '</ol>';
 }
