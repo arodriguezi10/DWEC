@@ -223,9 +223,12 @@ async function cargarNuevaPregunta() {
     const jugadorActivo = jugadores[turnoActual];
     let aciertos = jugadorActivo.aciertos[categoriaSeleccionada] || 0;
     
+    /////////////////////////////////////
+    ///////PROBABILIDAD DE QUESITO //////
+    /////////////////////////////////////
     // Si tiene 2 aciertos y aún no tiene el quesito, 75% de probabilidad
-    if (aciertos >= 2 && !jugadorActivo.quesitos.has(categoriaSeleccionada)) {
-        esPreguntaDeQuesito = Math.random() <= 0.75; 
+    if (aciertos >= 1 && !jugadorActivo.quesitos.has(categoriaSeleccionada)) {
+        esPreguntaDeQuesito = Math.random() <= 0.75; // probabilidad
     } else {
         esPreguntaDeQuesito = false;
     }
