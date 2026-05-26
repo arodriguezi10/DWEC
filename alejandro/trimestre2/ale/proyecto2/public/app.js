@@ -1,15 +1,22 @@
-// =====================================================================
-// 1. CONFIGURACIÓN PRINCIPAL Y VARIABLES DE MEMORIA (ESTADO DEL JUEGO)
-// =====================================================================
-const urlApi = 'http://localhost:3000';
+///////////////////
+///// CLIENTE /////
+///////////////////
 
-// Guardamos toda la información de los dos jugadores
+///////////////////////////////////////////////////////////////////////////////
+///// 1. CONFIGURACIÓN PRINCIPAL Y VARIABLES GLOBALES (MEMORIA DEL JUEGO) /////
+///////////////////////////////////////////////////////////////////////////////
+
+const urlApi = 'http://localhost:3000'; // nuestro servidor
+
+// lista para guardar toda la información de los dos jugadores
 let jugadores = [
     { id: 'j1', nombre: '', puntos: 0, quesitos: new Set(), aciertos: {} },
     { id: 'j2', nombre: '', puntos: 0, quesitos: new Set(), aciertos: {} }
 ];
 
-// Si es 0, juega el Jugador 1. Si es 1, juega el Jugador 2.
+// control de turno: 
+// turno = 0 = Jugador 1
+// turno = 1 = Jugador 2
 let turnoActual = 0; 
 
 // Variables para recordar qué está pasando en este momento exacto
@@ -28,9 +35,9 @@ let velocidadGiro = 0;
 let ruletaGirando = false;
 const coloresRuleta = ["#f39c12", "#e74c3c", "#3498db", "#9b59b6", "#2ecc71", "#1abc9c", "#1e0e35"];
 
-// =====================================================================
-// 2. ENLACES CON EL HTML (ELEMENTOS VISUALES)
-// =====================================================================
+//////////////////////////////////////////////////////////////////////////////
+////////// 2. ENLACES CON EL HTML (BÚSQUEDA DE ELEMENTOS VISUALES) ///////////
+/////////////////////////////////////////////////////////////////////////////
 
 // Pantallas completas
 const pantallaBienvenida = document.getElementById('pantalla-bienvenida');
@@ -74,9 +81,9 @@ const seccionRegistro = document.getElementById('seccion-registro');
 const seccionRanking = document.getElementById('seccion-ranking');
 const listaRanking = document.getElementById('lista-ranking');
 
-// =====================================================================
-// 3. EVENTOS (CUANDO EL USUARIO HACE CLIC EN LOS BOTONES)
-// =====================================================================
+//////////////////////////////////////////////////////////////////////////////
+////////// 3. EVENTOS (CUANDO EL USUARIO HACE CLIC EN LOS BOTONES) ///////////
+//////////////////////////////////////////////////////////////////////////////
 btnEmpezarJuego.addEventListener('click', iniciarPartida);
 btnGirar.addEventListener('click', iniciarGiroRuleta);
 btnEmpezar.addEventListener('click', prepararPantallaPregunta);
@@ -84,9 +91,9 @@ botonSiguiente.addEventListener('click', comprobarSiAlguienHaGanadoOPasarTurno);
 btnReiniciar.addEventListener('click', volverAlaPantallaInicial);
 btnGuardarRecord.addEventListener('click', guardarRecordsEnElServidor);
 
-// =====================================================================
-// 4. FUNCIONES DE LÓGICA PASO A PASO
-// =====================================================================
+//////////////////////////////////////////////////////////////////////////////
+////////////////////// 4. FUNCIONES DE LÓGICA PASO A PASO ////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
 function cambiarPantallaVisual(pantallaDestino) {
     // Escondemos absolutamente todas las pantallas primero
@@ -110,21 +117,23 @@ async function iniciarPartida() {
     const nombreJugador1 = inputNombreJ1.value.trim();
     const nombreJugador2 = inputNombreJ2.value.trim();
 
-    // Bloqueo de seguridad si faltan nombres
+    // Validaciones por si algunos de los campos está vacio
     if (nombreJugador1 === "" || nombreJugador2 === "") {
         alert("Ambos jugadores deben introducir su nombre.");
         return; 
     }
 
-    // Reiniciamos los datos por si es una partida nueva
+    // reiniciamos los datos en memoria de los usuarios por si venimos de una partida anterior
     jugadores[0] = { id: 'j1', nombre: nombreJugador1, puntos: 0, quesitos: new Set(), aciertos: {} };
     jugadores[1] = { id: 'j2', nombre: nombreJugador2, puntos: 0, quesitos: new Set(), aciertos: {} };
     turnoActual = 0;
 
     // Limpiamos los colores visuales de los quesitos en el HTML
-    document.querySelectorAll('.quesito').forEach(quesitoHtml => {
-        quesitoHtml.classList.remove('obtenido');
-    });
+    let todosLosQuesitos = document.querySelectorAll('.quesito');
+    // recorremos los qusitos
+    for (let i=0; i< todosLosQuesitos.length; i++){
+        todosLosQuesitos[i].classList.remove('obtenido')
+    }
     
     panelProgreso.classList.remove('oculto');
     
@@ -134,22 +143,24 @@ async function iniciarPartida() {
     prepararRuletaParaSiguienteTurno();
 }
 
+// Actualiza los colores y textos del panel superior según a quién le toque
 function refrescarMarcadoresEnPantalla() {
-    let jugadorActivo = jugadores[turnoActual];
+    let jugadorActivo = jugadores[turnoActual]; // recogemos el turno actual del jugador y lo guardamos en una variable
     
     // Mostramos el nombre de a quién le toca y aplicamos su color
     indicadorTurno.textContent = "Turno de: " + jugadorActivo.nombre;
     
-    if (turnoActual === 0) {
-        indicadorTurno.style.color = '#3498db'; // Azul
+    //aplicamos estilo para cada uno de los jugadores.
+    if (turnoActual === 0) { // jugador 1
+        indicadorTurno.style.color = '#3498db';
         
         // Destacamos el panel del Jugador 1
         panelJ1.style.opacity = "1";
         panelJ1.style.boxShadow = "0 0 10px #3498db";
         panelJ2.style.opacity = "0.5";
         panelJ2.style.boxShadow = "none";
-    } else {
-        indicadorTurno.style.color = '#e74c3c'; // Rojo
+    } else {   // jugador 2
+        indicadorTurno.style.color = '#e74c3c';
         
         // Destacamos el panel del Jugador 2
         panelJ2.style.opacity = "1";
@@ -181,9 +192,10 @@ async function pedirCategoriasAlServidor() {
     }
 }
 
-// =====================================================================
-// 5. FUNCIONES VISUALES (MOTOR DE LA RULETA)
-// =====================================================================
+//////////////////////////////////////////////////////////////////////////////
+///////////////// 5. FUNCIONES VISUALES (MOTOR DE LA RULETA) /////////////////
+//////////////////////////////////////////////////////////////////////////////
+
 function dibujarRuleta() {
     if (categorias.length === 0) return;
     
@@ -261,21 +273,22 @@ function calcularQueCategoriaHaGanado() {
     btnGirar.disabled = false;
 }
 
-// =====================================================================
-// 6. FLUJO DE PREGUNTAS Y RESPUESTAS
-// =====================================================================
+//////////////////////////////////////////////////////////////////////
+///////////////// 6. FLUJO DE PREGUNTAS Y RESPUESTAS /////////////////
+//////////////////////////////////////////////////////////////////////
+
 function prepararPantallaPregunta() {
     cambiarPantallaVisual(pantallaJuego);
     cargarNuevaPreguntaDesdeServidor();
 }
 
 async function cargarNuevaPreguntaDesdeServidor() {
-    // 1. Limpiamos cualquier rastro de la pregunta anterior
+    // 1. Limpiamos cualquier rastro de la pregunta anterior, limpiamos todo
     contenedorOpciones.innerHTML = '';
     resultado.textContent = '';
     botonSiguiente.style.display = 'none';
 
-    let jugadorActivo = jugadores[turnoActual];
+    let jugadorActivo = jugadores[turnoActual]; // recojemos el turno actual
     
     // 2. Revisamos cuantos aciertos lleva en esta categoría
     let cantidadDeAciertos = 0;
@@ -287,15 +300,15 @@ async function cargarNuevaPreguntaDesdeServidor() {
     // y no tener ya el quesito conseguido. Si cumple, 75% de que aparezca.
     let noTieneQuesitoAun = !jugadorActivo.quesitos.has(categoriaSeleccionada);
     
+    // 1. Por defecto, asumimos que no hay premio
+    esPreguntaDeQuesito = false;
+
+    // 2. Solo si cumple las condiciones, tiramos los dados para ver si le toca
     if (cantidadDeAciertos >= 0 && noTieneQuesitoAun === true) {
         let numeroAleatorio = Math.random();
         if (numeroAleatorio <= 0.99) {
             esPreguntaDeQuesito = true;
-        } else {
-            esPreguntaDeQuesito = false;
         }
-    } else {
-        esPreguntaDeQuesito = false;
     }
 
     // 4. Mostramos el aviso visual si toca quesito
@@ -443,15 +456,21 @@ function comprobarSiAlguienHaGanadoOPasarTurno() {
     if (jugadorActivo.quesitos.size >= categorias.length) {
         ejecutarFinalDeLaPartida(jugadorActivo);
     } else {
-        // Matematicas simples para alternar entre 0 y 1
-        turnoActual = (turnoActual + 1) % 2;
+        if (turnoActual === 0) {
+            // Si era el turno del Jugador 1, pasamos al Jugador 2
+            turnoActual = 1;
+        } else {
+            // Si era el turno del Jugador 2, pasamos al Jugador 1
+            turnoActual = 0;
+        }
         prepararRuletaParaSiguienteTurno();
     }
 }
 
-// =====================================================================
-// 7. FUNCIONES DEL FINAL DEL JUEGO Y GUARDADO
-// =====================================================================
+///////////////////////////////////////////////////////////////////////////////
+///////////////// 7. FUNCIONES DEL FINAL DEL JUEGO Y GUARDADO /////////////////
+///////////////////////////////////////////////////////////////////////////////
+
 function ejecutarFinalDeLaPartida(ganadorDefinitivo) {
     cambiarPantallaVisual(pantallaResultados);
     panelProgreso.classList.add('oculto');
