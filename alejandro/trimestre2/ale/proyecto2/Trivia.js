@@ -1,6 +1,7 @@
 class Trivia {
   constructor(rutaArchivo) {
     try {
+      // Usamos require estándar para cargar el JSON directamente
       const datosCrudos = require(rutaArchivo);
       this.categoriasDisponibles = Object.keys(datosCrudos);
       this.preguntas = this.normalizarDatos(datosCrudos);
@@ -11,8 +12,10 @@ class Trivia {
     }
   }
 
+  // Bucle clásico for...in combinado con forEach
   normalizarDatos(datos) {
     let preguntasFormateadas = [];
+    
     for (const categoria in datos) {
       datos[categoria].forEach(item => {
         preguntasFormateadas.push({
@@ -23,6 +26,7 @@ class Trivia {
         });
       });
     }
+    
     return preguntasFormateadas;
   }
 

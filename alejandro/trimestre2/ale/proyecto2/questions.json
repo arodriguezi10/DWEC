@@ -1,13 +1,13 @@
 {
   "Geografía": [
     {
-      "text": "¿Cuál es el punto más bajo de la superficie terrestre continental?",
+      "text": "¿Cuál la capital de España?",
       "choices": [
-        "Valle de la Muerte",
-        "Mar Muerto",
-        "Depresión de Turpan"
+        "Madrid",
+        "Sevilla",
+        "Valencia"
       ],
-      "answer": "Mar Muerto"
+      "answer": "Madrid"
     },
     {
       "text": "¿Qué país africano tiene forma casi rectangular perfecta?",
@@ -19,20 +19,20 @@
       "answer": "Chad"
     },
     {
-      "text": "¿Cuál es la capital más austral del mundo?",
+      "text": "¿Cuál es la capital de Italia?",
       "choices": [
-        "Wellington",
-        "Canberra",
+        "Roma",
+        "París",
         "Buenos Aires"
       ],
-      "answer": "Wellington"
+      "answer": "Roma"
     },
     {
       "text": "¿Qué río atraviesa más países?",
       "choices": [
         "Danubio",
-        "Nilo",
-        "Rin"
+        "Tajo",
+        "Ebro"
       ],
       "answer": "Danubio"
     },
@@ -49,15 +49,15 @@
       "text": "¿Cuál es la isla más grande del mundo?",
       "choices": [
         "Groenlandia",
-        "Nueva Guinea",
-        "Borneo"
+        "Islas Canarias",
+        "Islas Baleares"
       ],
       "answer": "Groenlandia"
     },
     {
       "text": "¿Qué país tiene más volcanes activos?",
       "choices": [
-        "Japón",
+        "España",
         "Indonesia",
         "Estados Unidos"
       ],

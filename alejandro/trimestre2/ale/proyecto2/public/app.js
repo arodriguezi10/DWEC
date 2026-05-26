@@ -1,52 +1,64 @@
+// =====================================================================
+// 1. CONFIGURACIÓN PRINCIPAL Y VARIABLES DE MEMORIA (ESTADO DEL JUEGO)
+// =====================================================================
 const urlApi = 'http://localhost:3000';
 
-// Estado del juego para 2 jugadores
+// Guardamos toda la información de los dos jugadores
 let jugadores = [
     { id: 'j1', nombre: '', puntos: 0, quesitos: new Set(), aciertos: {} },
     { id: 'j2', nombre: '', puntos: 0, quesitos: new Set(), aciertos: {} }
 ];
-let turnoActual = 0; // 0 = Jugador 1, 1 = Jugador 2
 
+// Si es 0, juega el Jugador 1. Si es 1, juega el Jugador 2.
+let turnoActual = 0; 
+
+// Variables para recordar qué está pasando en este momento exacto
 let preguntaActual = null;
 let categoriaSeleccionada = '';
 let categorias = [];
 let esPreguntaDeQuesito = false;
 
+// Variables para controlar el tiempo del usuario
 let temporizador = null;
 let tiempoRestante = 30;
 
+// Variables matemáticas para que la ruleta gire visualmente
 let anguloActual = 0;
 let velocidadGiro = 0;
 let ruletaGirando = false;
 const coloresRuleta = ["#f39c12", "#e74c3c", "#3498db", "#9b59b6", "#2ecc71", "#1abc9c", "#1e0e35"];
 
-// Pantallas
+// =====================================================================
+// 2. ENLACES CON EL HTML (ELEMENTOS VISUALES)
+// =====================================================================
+
+// Pantallas completas
 const pantallaBienvenida = document.getElementById('pantalla-bienvenida');
 const pantallaInicio = document.getElementById('pantalla-inicio');
 const pantallaJuego = document.getElementById('pantalla-juego');
 const pantallaResultados = document.getElementById('pantalla-resultados');
 const panelProgreso = document.getElementById('panel-progreso');
 
-// Elementos Bienvenida
+// Formularios iniciales
 const inputNombreJ1 = document.getElementById('nombre-j1');
 const inputNombreJ2 = document.getElementById('nombre-j2');
 const btnEmpezarJuego = document.getElementById('btn-empezar-juego');
 
-// Elementos Marcador
+// Marcadores superiores
 const indicadorTurno = document.getElementById('indicador-turno');
 const panelJ1 = document.getElementById('panel-j1');
 const panelJ2 = document.getElementById('panel-j2');
 const infoJ1 = document.getElementById('info-j1');
 const infoJ2 = document.getElementById('info-j2');
 
-// Elementos Ruleta
+// Elementos de la Ruleta
 const canvasRuleta = document.getElementById('canvas-ruleta');
 const ctx = canvasRuleta ? canvasRuleta.getContext('2d') : null;
 const btnGirar = document.getElementById('btn-girar');
 const temaSeleccionado = document.getElementById('tema-seleccionado');
 const btnEmpezar = document.getElementById('btn-empezar');
 
-// Elementos Juego
+// Elementos durante la Pregunta
 const avisoQuesito = document.getElementById('aviso-quesito');
 const textoTiempo = document.getElementById('texto-tiempo');
 const textoPregunta = document.getElementById('texto-pregunta');
@@ -54,7 +66,7 @@ const contenedorOpciones = document.getElementById('contenedor-opciones');
 const resultado = document.getElementById('resultado');
 const botonSiguiente = document.getElementById('siguiente-btn');
 
-// Elementos Resultados
+// Elementos en la Pantalla Final (Resultados)
 const textoPuntuacion = document.getElementById('texto-puntuacion');
 const btnReiniciar = document.getElementById('btn-reiniciar');
 const btnGuardarRecord = document.getElementById('btn-guardar-record');
@@ -62,115 +74,143 @@ const seccionRegistro = document.getElementById('seccion-registro');
 const seccionRanking = document.getElementById('seccion-ranking');
 const listaRanking = document.getElementById('lista-ranking');
 
-// Listeners
+// =====================================================================
+// 3. EVENTOS (CUANDO EL USUARIO HACE CLIC EN LOS BOTONES)
+// =====================================================================
 btnEmpezarJuego.addEventListener('click', iniciarPartida);
 btnGirar.addEventListener('click', iniciarGiroRuleta);
-btnEmpezar.addEventListener('click', irAPregunta);
-botonSiguiente.addEventListener('click', manejarSiguienteAccion);
-btnReiniciar.addEventListener('click', volverAlInicio);
-btnGuardarRecord.addEventListener('click', guardarRecordsMultijugador);
+btnEmpezar.addEventListener('click', prepararPantallaPregunta);
+botonSiguiente.addEventListener('click', comprobarSiAlguienHaGanadoOPasarTurno);
+btnReiniciar.addEventListener('click', volverAlaPantallaInicial);
+btnGuardarRecord.addEventListener('click', guardarRecordsEnElServidor);
 
-function cambiarPantalla(pantallaDestino) {
+// =====================================================================
+// 4. FUNCIONES DE LÓGICA PASO A PASO
+// =====================================================================
+
+function cambiarPantallaVisual(pantallaDestino) {
+    // Escondemos absolutamente todas las pantallas primero
     pantallaBienvenida.classList.remove('activa');
     pantallaInicio.classList.remove('activa');
     pantallaJuego.classList.remove('activa');
     pantallaResultados.classList.remove('activa');
+    
+    // Y mostramos únicamente la que hemos pedido
     pantallaDestino.classList.add('activa');
 }
 
-function volverAlInicio() {
+function volverAlaPantallaInicial() {
     panelProgreso.classList.add('oculto');
     inputNombreJ1.value = "";
     inputNombreJ2.value = "";
-    cambiarPantalla(pantallaBienvenida);
+    cambiarPantallaVisual(pantallaBienvenida);
 }
 
 async function iniciarPartida() {
-    const n1 = inputNombreJ1.value.trim();
-    const n2 = inputNombreJ2.value.trim();
+    const nombreJugador1 = inputNombreJ1.value.trim();
+    const nombreJugador2 = inputNombreJ2.value.trim();
 
-    if (!n1 || !n2) {
+    // Bloqueo de seguridad si faltan nombres
+    if (nombreJugador1 === "" || nombreJugador2 === "") {
         alert("Ambos jugadores deben introducir su nombre.");
-        return;
+        return; 
     }
 
-    // Aciertos debe ser un objeto {} para guardar rachas por categoría
-    jugadores[0] = { id: 'j1', nombre: n1, puntos: 0, quesitos: new Set(), aciertos: {} };
-    jugadores[1] = { id: 'j2', nombre: n2, puntos: 0, quesitos: new Set(), aciertos: {} };
+    // Reiniciamos los datos por si es una partida nueva
+    jugadores[0] = { id: 'j1', nombre: nombreJugador1, puntos: 0, quesitos: new Set(), aciertos: {} };
+    jugadores[1] = { id: 'j2', nombre: nombreJugador2, puntos: 0, quesitos: new Set(), aciertos: {} };
     turnoActual = 0;
 
-    document.querySelectorAll('.quesito').forEach(q => q.classList.remove('obtenido'));
+    // Limpiamos los colores visuales de los quesitos en el HTML
+    document.querySelectorAll('.quesito').forEach(quesitoHtml => {
+        quesitoHtml.classList.remove('obtenido');
+    });
     
     panelProgreso.classList.remove('oculto');
     
-    await cargarCategorias();
-    actualizarInterfazMarcadores();
-    prepararSiguienteTurno();
+    // Pedimos las categorías al servidor y preparamos el entorno
+    await pedirCategoriasAlServidor();
+    refrescarMarcadoresEnPantalla();
+    prepararRuletaParaSiguienteTurno();
 }
 
-function actualizarInterfazMarcadores() {
-    const jugadorActivo = jugadores[turnoActual];
-    indicadorTurno.textContent = `Turno de: ${jugadorActivo.nombre}`;
-    indicadorTurno.style.color = turnoActual === 0 ? '#3498db' : '#e74c3c';
-
-    // Se muestran los puntos y la cantidad de quesitos (tamaño del Set)
-    infoJ1.textContent = `${jugadores[0].nombre} | ${jugadores[0].puntos} pts | ${jugadores[0].quesitos.size} Quesitos`;
-    infoJ2.textContent = `${jugadores[1].nombre} | ${jugadores[1].puntos} pts | ${jugadores[1].quesitos.size} Quesitos`;
-
+function refrescarMarcadoresEnPantalla() {
+    let jugadorActivo = jugadores[turnoActual];
+    
+    // Mostramos el nombre de a quién le toca y aplicamos su color
+    indicadorTurno.textContent = "Turno de: " + jugadorActivo.nombre;
+    
     if (turnoActual === 0) {
+        indicadorTurno.style.color = '#3498db'; // Azul
+        
+        // Destacamos el panel del Jugador 1
         panelJ1.style.opacity = "1";
         panelJ1.style.boxShadow = "0 0 10px #3498db";
         panelJ2.style.opacity = "0.5";
         panelJ2.style.boxShadow = "none";
     } else {
+        indicadorTurno.style.color = '#e74c3c'; // Rojo
+        
+        // Destacamos el panel del Jugador 2
         panelJ2.style.opacity = "1";
         panelJ2.style.boxShadow = "0 0 10px #e74c3c";
         panelJ1.style.opacity = "0.5";
         panelJ1.style.boxShadow = "none";
     }
+
+    // Actualizamos los textos de puntos y cantidad de quesitos
+    infoJ1.textContent = jugadores[0].nombre + " | " + jugadores[0].puntos + " pts | " + jugadores[0].quesitos.size + " Quesitos";
+    infoJ2.textContent = jugadores[1].nombre + " | " + jugadores[1].puntos + " pts | " + jugadores[1].quesitos.size + " Quesitos";
 }
 
-function prepararSiguienteTurno() {
-    actualizarInterfazMarcadores();
+function prepararRuletaParaSiguienteTurno() {
+    refrescarMarcadoresEnPantalla();
     temaSeleccionado.textContent = "Tema: ---";
     btnEmpezar.style.display = 'none';
     btnGirar.disabled = false;
-    cambiarPantalla(pantallaInicio);
+    cambiarPantallaVisual(pantallaInicio);
 }
 
-async function cargarCategorias() {
+async function pedirCategoriasAlServidor() {
     try {
-        const respuesta = await fetch(`${urlApi}/categorias`);
-        categorias = await respuesta.json();
+        const respuestaServidor = await fetch(urlApi + '/categorias');
+        categorias = await respuestaServidor.json();
         dibujarRuleta();
     } catch (error) {
-        temaSeleccionado.textContent = "Error al conectar con el servidor.";
+        temaSeleccionado.textContent = "Error de conexion con el servidor.";
     }
 }
 
+// =====================================================================
+// 5. FUNCIONES VISUALES (MOTOR DE LA RULETA)
+// =====================================================================
 function dibujarRuleta() {
     if (categorias.length === 0) return;
-    const centroX = canvasRuleta.width / 2;
-    const centroY = canvasRuleta.height / 2;
-    const radio = centroX - 10;
-    const arco = (2 * Math.PI) / categorias.length;
+    
+    let centroX = canvasRuleta.width / 2;
+    let centroY = canvasRuleta.height / 2;
+    let radio = centroX - 10;
+    let arcoPorCategoria = (2 * Math.PI) / categorias.length;
 
+    // Limpiamos el canvas antes de volver a dibujar
     ctx.clearRect(0, 0, canvasRuleta.width, canvasRuleta.height);
 
     for (let i = 0; i < categorias.length; i++) {
-        const anguloInicio = anguloActual + i * arco;
-        const anguloFin = anguloInicio + arco;
+        let anguloDeInicio = anguloActual + (i * arcoPorCategoria);
+        let anguloFinal = anguloDeInicio + arcoPorCategoria;
 
+        // Dibujamos la porcion de la ruleta (el triangulo curvado)
         ctx.beginPath();
         ctx.fillStyle = coloresRuleta[i % coloresRuleta.length];
         ctx.moveTo(centroX, centroY);
-        ctx.arc(centroX, centroY, radio, anguloInicio, anguloFin);
+        ctx.arc(centroX, centroY, radio, anguloDeInicio, anguloFinal);
         ctx.fill();
         ctx.stroke();
 
+        // Escribimos el texto de la categoria
         ctx.save();
         ctx.translate(centroX, centroY);
-        ctx.rotate(anguloInicio + arco / 2);
+        ctx.rotate(anguloDeInicio + arcoPorCategoria / 2);
         ctx.textAlign = "right";
         ctx.fillStyle = "#fff";
         ctx.font = "bold 16px sans-serif";
@@ -180,188 +220,266 @@ function dibujarRuleta() {
 }
 
 function iniciarGiroRuleta() {
-    if (ruletaGirando || categorias.length === 0) return;
+    if (ruletaGirando === true || categorias.length === 0) {
+        return; // Evitamos que el usuario pulse multiples veces
+    }
+    
     ruletaGirando = true;
     btnGirar.disabled = true;
     btnEmpezar.style.display = 'none';
+    
+    // Damos una fuerza inicial aleatoria para que no siempre caiga igual
     velocidadGiro = Math.random() * 0.2 + 0.3;
-    animarRuleta();
+    animarGiro();
 }
 
-function animarRuleta() {
+function animarGiro() {
     if (velocidadGiro > 0.002) {
-        anguloActual += velocidadGiro;
-        velocidadGiro *= 0.98;
+        // Mientras tenga velocidad, sumamos el angulo y reducimos la fuerza un 2%
+        anguloActual = anguloActual + velocidadGiro;
+        velocidadGiro = velocidadGiro * 0.98;
         dibujarRuleta();
-        requestAnimationFrame(animarRuleta);
+        requestAnimationFrame(animarGiro);
     } else {
+        // Cuando pierde toda la velocidad, se detiene
         ruletaGirando = false;
-        determinarCategoriaSeleccionada();
+        calcularQueCategoriaHaGanado();
     }
 }
 
-function determinarCategoriaSeleccionada() {
-    const arco = (2 * Math.PI) / categorias.length;
-    const anguloNormalizado = anguloActual % (2 * Math.PI);
+function calcularQueCategoriaHaGanado() {
+    let arco = (2 * Math.PI) / categorias.length;
+    let anguloNormalizado = anguloActual % (2 * Math.PI);
     let anguloPuntero = (1.5 * Math.PI - anguloNormalizado + 2 * Math.PI) % (2 * Math.PI);
-    const indiceGanador = Math.floor(anguloPuntero / arco);
+    let indiceCategoriaElegida = Math.floor(anguloPuntero / arco);
     
-    categoriaSeleccionada = categorias[indiceGanador];
-    temaSeleccionado.textContent = `Tema: ${categoriaSeleccionada}`;
+    categoriaSeleccionada = categorias[indiceCategoriaElegida];
+    temaSeleccionado.textContent = "Tema: " + categoriaSeleccionada;
     
+    // Mostramos el boton para ir a la pregunta
     btnEmpezar.style.display = 'inline-block';
     btnGirar.disabled = false;
 }
 
-function irAPregunta() {
-    cambiarPantalla(pantallaJuego);
-    cargarNuevaPregunta();
+// =====================================================================
+// 6. FLUJO DE PREGUNTAS Y RESPUESTAS
+// =====================================================================
+function prepararPantallaPregunta() {
+    cambiarPantallaVisual(pantallaJuego);
+    cargarNuevaPreguntaDesdeServidor();
 }
 
-async function cargarNuevaPregunta() {
-    limpiarInterfazJuego();
-    const jugadorActivo = jugadores[turnoActual];
-    let aciertos = jugadorActivo.aciertos[categoriaSeleccionada] || 0;
+async function cargarNuevaPreguntaDesdeServidor() {
+    // 1. Limpiamos cualquier rastro de la pregunta anterior
+    contenedorOpciones.innerHTML = '';
+    resultado.textContent = '';
+    botonSiguiente.style.display = 'none';
+
+    let jugadorActivo = jugadores[turnoActual];
     
-    /////////////////////////////////////
-    ///////PROBABILIDAD DE QUESITO //////
-    /////////////////////////////////////
-    // Si tiene 2 aciertos y aún no tiene el quesito, 75% de probabilidad
-    if (aciertos >= 1 && !jugadorActivo.quesitos.has(categoriaSeleccionada)) {
-        esPreguntaDeQuesito = Math.random() <= 0.75; // probabilidad
+    // 2. Revisamos cuantos aciertos lleva en esta categoría
+    let cantidadDeAciertos = 0;
+    if (jugadorActivo.aciertos[categoriaSeleccionada] !== undefined) {
+        cantidadDeAciertos = jugadorActivo.aciertos[categoriaSeleccionada];
+    }
+    
+    // 3. Logica del Quesito: Necesita al menos 2 aciertos previos seguidos
+    // y no tener ya el quesito conseguido. Si cumple, 75% de que aparezca.
+    let noTieneQuesitoAun = !jugadorActivo.quesitos.has(categoriaSeleccionada);
+    
+    if (cantidadDeAciertos >= 0 && noTieneQuesitoAun === true) {
+        let numeroAleatorio = Math.random();
+        if (numeroAleatorio <= 0.99) {
+            esPreguntaDeQuesito = true;
+        } else {
+            esPreguntaDeQuesito = false;
+        }
     } else {
         esPreguntaDeQuesito = false;
     }
 
-    avisoQuesito.style.display = esPreguntaDeQuesito ? 'block' : 'none';
+    // 4. Mostramos el aviso visual si toca quesito
+    if (esPreguntaDeQuesito === true) {
+        avisoQuesito.style.display = 'block';
+    } else {
+        avisoQuesito.style.display = 'none';
+    }
     
+    // 5. Pedimos la pregunta real al servidor
     try {
-        const respuesta = await fetch(`${urlApi}/pregunta-aleatoria?categoria=${encodeURIComponent(categoriaSeleccionada)}`);
+        const urlSegura = urlApi + '/pregunta-aleatoria?categoria=' + encodeURIComponent(categoriaSeleccionada);
+        const respuesta = await fetch(urlSegura);
         preguntaActual = await respuesta.json();
-        renderizarPregunta(preguntaActual);
-        iniciarTemporizador();
+        
+        pintarPreguntaEnHtml(preguntaActual);
+        iniciarRelojDescuento();
     } catch (error) {
-        textoPregunta.textContent = "Error al cargar la pregunta.";
+        textoPregunta.textContent = "Fallo al cargar la pregunta del servidor.";
     }
 }
 
-function renderizarPregunta(pregunta) {
-    textoPregunta.textContent = pregunta.pregunta;
-    pregunta.opciones.forEach(opcion => {
-        const boton = document.createElement('button');
-        boton.textContent = opcion;
-        boton.className = 'opcion';
-        boton.addEventListener('click', () => verificarRespuesta(opcion));
-        contenedorOpciones.appendChild(boton);
-    });
+function pintarPreguntaEnHtml(datosPregunta) {
+    textoPregunta.textContent = datosPregunta.pregunta;
+    
+    // Por cada opción, creamos un boton
+    for (let i = 0; i < datosPregunta.opciones.length; i++) {
+        let nombreOpcion = datosPregunta.opciones[i];
+        
+        let botonHtml = document.createElement('button');
+        botonHtml.textContent = nombreOpcion;
+        botonHtml.className = 'opcion';
+        
+        // Al pulsar el boton, llamamos a la verificacion
+        botonHtml.addEventListener('click', function() {
+            verificarSiRespuestaEsCorrecta(nombreOpcion);
+        });
+        
+        contenedorOpciones.appendChild(botonHtml);
+    }
 }
 
-function iniciarTemporizador() {
+function iniciarRelojDescuento() {
     clearInterval(temporizador);
     tiempoRestante = 30;
-    textoTiempo.textContent = `Tiempo: ${tiempoRestante}s`;
-    temporizador = setInterval(() => {
-        tiempoRestante--;
-        textoTiempo.textContent = `Tiempo: ${tiempoRestante}s`;
+    textoTiempo.textContent = "Tiempo: " + tiempoRestante + "s";
+    
+    temporizador = setInterval(function() {
+        tiempoRestante = tiempoRestante - 1;
+        textoTiempo.textContent = "Tiempo: " + tiempoRestante + "s";
+        
+        // Si el reloj llega a cero, forzamos un error enviando 'null'
         if (tiempoRestante <= 0) {
             clearInterval(temporizador);
-            verificarRespuesta(null);
+            verificarSiRespuestaEsCorrecta(null);
         }
     }, 1000);
 }
 
-async function verificarRespuesta(opcion) {
+async function verificarSiRespuestaEsCorrecta(respuestaElegidaPorUsuario) {
+    // 1. Frenamos el reloj
     clearInterval(temporizador);
-    document.querySelectorAll('.opcion').forEach(btn => btn.disabled = true);
-    let fueCorrecta = false;
-    const jugadorActivo = jugadores[turnoActual];
+    
+    // 2. Desactivamos todos los botones para evitar doble clic
+    let botonesDeOpciones = document.querySelectorAll('.opcion');
+    for (let i = 0; i < botonesDeOpciones.length; i++) {
+        botonesDeOpciones[i].disabled = true;
+    }
+    
+    let elUsuarioHaAcertado = false;
+    let jugadorActivo = jugadores[turnoActual];
 
-    if (opcion === null) {
-        resultado.textContent = "Tiempo agotado.";
+    // 3. Comprobamos si ha perdido por tiempo
+    if (respuestaElegidaPorUsuario === null) {
+        resultado.textContent = "Se acabo el tiempo.";
         resultado.style.color = "red";
     } else {
+        // 4. Preguntamos al servidor si acertó
         try {
-            const res = await fetch(`${urlApi}/verificar-respuesta`, {
+            const envioDeDatos = await fetch(urlApi + '/verificar-respuesta', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ textoPregunta: preguntaActual.pregunta, respuestaUsuario: opcion })
+                body: JSON.stringify({ 
+                    textoPregunta: preguntaActual.pregunta, 
+                    respuestaUsuario: respuestaElegidaPorUsuario 
+                })
             });
-            const data = await res.json();
-            fueCorrecta = data.esCorrecta;
-            resultado.textContent = fueCorrecta ? "Correcto" : `Incorrecto. Era: ${data.respuestaCorrecta}`;
-            resultado.style.color = fueCorrecta ? "green" : "red";
-        } catch (e) {
-            resultado.textContent = "Error de validación.";
+            
+            const datosDelServidor = await envioDeDatos.json();
+            elUsuarioHaAcertado = datosDelServidor.esCorrecta;
+            
+            if (elUsuarioHaAcertado === true) {
+                resultado.textContent = "¡Respuesta correcta!";
+                resultado.style.color = "green";
+            } else {
+                resultado.textContent = "Has fallado. La respuesta era: " + datosDelServidor.respuestaCorrecta;
+                resultado.style.color = "red";
+            }
+            
+        } catch (error) {
+            resultado.textContent = "Fallo interno al comprobar la respuesta.";
         }
     }
 
-    if (fueCorrecta) {
-        jugadorActivo.puntos += 10;
-        if (esPreguntaDeQuesito) {
-            jugadorActivo.puntos += 50;
+    // 5. Reparto de puntos y actualización de estado
+    if (elUsuarioHaAcertado === true) {
+        jugadorActivo.puntos = jugadorActivo.puntos + 10;
+        
+        if (esPreguntaDeQuesito === true) {
+            // Premio gordo
+            jugadorActivo.puntos = jugadorActivo.puntos + 50;
             jugadorActivo.quesitos.add(categoriaSeleccionada);
             
-            // Si consigue el quesito, su racha en esa categoría se reinicia a 0
+            // Reiniciar su racha a 0 en esta categoria porque ya ganó el premio
             jugadorActivo.aciertos[categoriaSeleccionada] = 0; 
             
-            const prefijoTema = categoriaSeleccionada === 'Arte y Literatura' ? 'Arte' : categoriaSeleccionada;
-            const idHtml = `q-${prefijoTema}-${jugadorActivo.id}`;
-            document.getElementById(idHtml)?.classList.add('obtenido');
+            // Iluminamos el quesito en la interfaz
+            let prefijoTema = categoriaSeleccionada;
+            if (categoriaSeleccionada === 'Arte y Literatura') {
+                prefijoTema = 'Arte';
+            }
+            let identificadorCcs = 'q-' + prefijoTema + '-' + jugadorActivo.id;
+            document.getElementById(identificadorCcs).classList.add('obtenido');
             
         } else {
-            // Sumar a la racha
-            jugadorActivo.aciertos[categoriaSeleccionada] = (jugadorActivo.aciertos[categoriaSeleccionada] || 0) + 1;
+            // Solo aumentamos su racha de aciertos
+            if (jugadorActivo.aciertos[categoriaSeleccionada] === undefined) {
+                jugadorActivo.aciertos[categoriaSeleccionada] = 0;
+            }
+            jugadorActivo.aciertos[categoriaSeleccionada] = jugadorActivo.aciertos[categoriaSeleccionada] + 1;
         }
     } else {
-        // Fallar la pregunta reinicia a 0 la racha de esa categoría
+        // Si falla, pierde por completo su racha en esa categoría
         jugadorActivo.aciertos[categoriaSeleccionada] = 0;
     }
 
-    actualizarInterfazMarcadores();
+    refrescarMarcadoresEnPantalla();
     botonSiguiente.style.display = 'inline-block';
 }
 
-function manejarSiguienteAccion() {
-    const jugadorActivo = jugadores[turnoActual];
+function comprobarSiAlguienHaGanadoOPasarTurno() {
+    let jugadorActivo = jugadores[turnoActual];
 
-    // Verificar si el jugador actual ha ganado al conseguir todas las categorías existentes
+    // Condicion de Victoria: Tener tantos quesitos como categorias existen
     if (jugadorActivo.quesitos.size >= categorias.length) {
-        finalizarPartida(jugadorActivo);
+        ejecutarFinalDeLaPartida(jugadorActivo);
     } else {
-        // Cambiar turno y preparar la ruleta para el siguiente jugador
+        // Matematicas simples para alternar entre 0 y 1
         turnoActual = (turnoActual + 1) % 2;
-        prepararSiguienteTurno();
+        prepararRuletaParaSiguienteTurno();
     }
 }
 
-function limpiarInterfazJuego() {
-    contenedorOpciones.innerHTML = '';
-    resultado.textContent = '';
-    botonSiguiente.style.display = 'none';
-}
-
-function finalizarPartida(ganador) {
-    cambiarPantalla(pantallaResultados);
+// =====================================================================
+// 7. FUNCIONES DEL FINAL DEL JUEGO Y GUARDADO
+// =====================================================================
+function ejecutarFinalDeLaPartida(ganadorDefinitivo) {
+    cambiarPantallaVisual(pantallaResultados);
     panelProgreso.classList.add('oculto');
     
-    const perdedor = jugadores[(turnoActual + 1) % 2];
+    // Buscamos quién es el que ha perdido
+    let perdedorDefinitivo;
+    if (turnoActual === 0) {
+        perdedorDefinitivo = jugadores[1];
+    } else {
+        perdedorDefinitivo = jugadores[0];
+    }
     
-    textoPuntuacion.innerHTML = `
-        🏆 ¡Gana: <strong>${ganador.nombre}</strong>!<br>
-        Puntos: ${ganador.puntos} | Quesitos conseguidos: ${ganador.quesitos.size}<br><br>
-        Segundo lugar: ${perdedor.nombre} con ${perdedor.puntos} puntos y ${perdedor.quesitos.size} quesitos.
-    `;
+    // Escribimos el resumen
+    textoPuntuacion.innerHTML = "Gana la partida: <strong>" + ganadorDefinitivo.nombre + "</strong>.<br>" +
+                                "Ha conseguido " + ganadorDefinitivo.puntos + " puntos y " + ganadorDefinitivo.quesitos.size + " quesitos.<br><br>" +
+                                "El jugador " + perdedorDefinitivo.nombre + " queda en segundo lugar con " + perdedorDefinitivo.puntos + " puntos.";
     
     seccionRegistro.style.display = 'block';
     seccionRanking.style.display = 'none';
     btnGuardarRecord.disabled = false;
 }
 
-async function guardarRecordsMultijugador() {
-    btnGuardarRecord.disabled = true;
+async function guardarRecordsEnElServidor() {
+    btnGuardarRecord.disabled = true; // Bloqueamos para evitar clics dobles
     
     try {
-        await fetch(`${urlApi}/puntuacion`, {
+        // Peticion 1: Guardamos al primer jugador
+        await fetch(urlApi + '/puntuacion', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -371,7 +489,8 @@ async function guardarRecordsMultijugador() {
             })
         });
         
-        const res2 = await fetch(`${urlApi}/puntuacion`, {
+        // Peticion 2: Guardamos al segundo jugador y capturamos el resultado del ranking
+        const respuestaServidor = await fetch(urlApi + '/puntuacion', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -381,18 +500,25 @@ async function guardarRecordsMultijugador() {
             })
         });
         
-        const data = await res2.json();
+        const datosEnJson = await respuestaServidor.json();
+        
+        // Escondemos el boton y mostramos la lista
         seccionRegistro.style.display = 'none';
-        mostrarRanking(data.ranking);
+        
+        seccionRanking.style.display = 'block';
+        listaRanking.innerHTML = '';
+        
+        let textoLista = '<ol>';
+        for (let i = 0; i < datosEnJson.ranking.length; i++) {
+            let registro = datosEnJson.ranking[i];
+            textoLista += '<li>' + registro.nombre + ': ' + registro.puntos + ' puntos (' + registro.quesitos + ' quesitos)</li>';
+        }
+        textoLista += '</ol>';
+        
+        listaRanking.innerHTML = textoLista;
 
     } catch (error) {
-        console.error("Error guardando los récords:", error);
         btnGuardarRecord.disabled = false;
-        alert("Ocurrió un error al guardar los datos en el servidor.");
+        alert("Ocurrio un problema tratando de conectar con la base de datos.");
     }
-}
-
-function mostrarRanking(ranking) {
-    seccionRanking.style.display = 'block';
-    listaRanking.innerHTML = '<ol>' + ranking.map(r => `<li>${r.nombre}: ${r.puntos} pts (${r.quesitos} quesitos)</li>`).join('') + '</ol>';
 }
