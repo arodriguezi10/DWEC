@@ -65,7 +65,8 @@ app.get("/pregunta-aleatoria", (req, res) => {
         res.json({
             categoria: pregunta.categoria,
             pregunta: pregunta.pregunta,
-            opciones: pregunta.opciones
+            opciones: pregunta.opciones,
+            riesgo: pregunta.riesgo
         });
 
     } catch (error) {
@@ -105,7 +106,6 @@ app.post("/questions", (req, res) => {
     }
 });
 
-
 // RUTA F: aqui es donde guardamos la puntuacion final de la partida
 app.post("/puntuacion", (req, res) => {
     try {
@@ -137,6 +137,32 @@ app.post("/puntuacion", (req, res) => {
         manejarError(res, error, "Error interno al guardar la puntuación");
     }
 });
+
+// RUTA G: aplicaremos el comodin
+app.post("/comodin", (req, res) =>{
+    try{
+        const textoPregunta = req.body.pregunta;
+
+        const preguntaFinal = juego.aplicarComodin(textoPregunta);
+
+        res.json({
+            opcionesFiltradas: preguntaFinal
+        });
+    }catch (error){
+        manejarError(res, error, "Error interno al aplicar el comodin")
+    }
+})
+
+// RUTA H: creamos un JSON con la categoria maldita elegida por la clasa Trivi
+app.get("/categoria-maldita", function(req, res){
+    try{
+        const maldita = juego.obtenerCategoriaMaldita();
+
+        res.json({ categoria: maldita });
+    }catch(error){
+        manejarError(res, error, "Error al seleccionar categoria maldita")
+    }
+} )
 
 ///////////////////////////////////////////
 /////////// FUNCIONES AUXILIARES //////////

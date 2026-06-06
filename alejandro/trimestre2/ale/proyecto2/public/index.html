@@ -30,7 +30,7 @@
 
         <div style="display: flex; justify-content: space-around; gap: 10px;">
             <div id="panel-j1" style="border: 3px solid #3498db; padding: 10px; border-radius: 10px; width: 45%;">
-            pt  <h3 id="info-j1" style="color: #3498db;">J1 | 0 pts</h3>
+                <h3 id="info-j1" style="color: #3498db;">J1 | 0 pts</h3>
                 <div class="marcador-quesitos">
                     <div class="pizza-base"></div>
                     <div class="quesito" id="q-Geografía-j1" title="Geografía"></div>
@@ -62,6 +62,10 @@
     <div id="pantalla-inicio" class="pantalla">
         <h2 id="titulo-ruleta">Gira para tu siguiente pregunta</h2>
 
+        <p style="color: #8e44ad; font-weight: bold; margin-top: 15px;">
+            Categoría Maldita: <span id="etiqueta-maldita">---</span>
+        </p>
+
         <div class="form-grupo">
             <div id="wrapper-ruleta">
                 <div id="flecha-ruleta">v</div>
@@ -84,10 +88,16 @@
 
         <h3 id="texto-tiempo">Tiempo: 30 seg</h3>
 
+        <div id="aviso-riesgo" style="display: none;">
+            <span class="badge">PREGUNTA DE RIESGO</span>
+        </div>
+
         <div id="contenedor-pregunta">
             <h2 id="texto-pregunta">Cargando...</h2>
             <div id="contenedor-opciones"></div>
         </div>
+
+        <button id="btn-comodin" style="display: none;">Usar comodín</button>
 
         <div id="resultado"></div>
         <button id="siguiente-btn" style="display: none;">Continuar</button>
