@@ -23,7 +23,7 @@ function obtenerPost() {
 
     .catch(error => {
       console.error("Error al mostrar los datos: ", error);
-      contenedorPost.innerHTML = '<p>Ocurrió un error al cargar.</p>';
+      contenedorPosts.innerHTML = '<p>Ocurrió un error al cargar.</p>';
     });
 }
 
