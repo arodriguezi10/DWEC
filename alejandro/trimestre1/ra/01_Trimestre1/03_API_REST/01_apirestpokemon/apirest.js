@@ -1,14 +1,14 @@
-// Obtenemos los datos de todos los pokemon 
-fetch('https://pokeapi.co/api/v2/pokemon')
-        .then(response => response.json())
-        .then(json => {
-            printPokemons(json.results);
-        });
+// Obtenemos los datos de todos los pokemon
+fetch("https://pokeapi.co/api/v2/pokemon")
+  .then((response) => response.json())
+  .then((json) => {
+    printPokemons(json.results);
+  });
 
 // Pinta todos los pokemos insertando un HTML dentro del #container
 function printPokemons(pokemons) {
-  const container = document.getElementById('container')
-  pokemons.forEach(pokemon => {
+  const container = document.getElementById("container");
+  pokemons.forEach((pokemon) => {
     container.innerHTML = `
     ${container.innerHTML}
     <div class="card">
@@ -24,5 +24,5 @@ function printPokemons(pokemons) {
 // una URL, para poder obtener todos los datos de ese pokemon, la cual contiene su ID
 // así que le extraigo el ID a la URL
 function getPokemonId(url) {
-  return url.replace('https://pokeapi.co/api/v2/pokemon/', '').replace('/','')
+  return url.replace("https://pokeapi.co/api/v2/pokemon/", "").replace("/", "");
 }

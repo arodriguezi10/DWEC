@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Preferencias Simples</title>
+    <style>
+        body { font-family: sans-serif; padding: 2rem; transition: background 0.3s, color 0.3s; }
+        .oscuro { background-color: #333; color: #fff; }
+        .claro { background-color: #fff; color: #000; }
+    </style>
+</head>
+<body class="claro" id="cuerpoPagina">
+    <h2>Configuración de Tema</h2>
+    <label for="selectorTema">Elige un tema:</label>
+    <select id="selectorTema">
+        <option value="claro">Modo Claro</option>
+        <option value="oscuro">Modo Oscuro</option>
+    </select>
+    <button id="btnAplicar">Aplicar y Guardar</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
