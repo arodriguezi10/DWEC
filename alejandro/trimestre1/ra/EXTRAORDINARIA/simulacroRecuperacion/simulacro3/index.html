@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulacro 3 - Analizador</title>
+    <style>
+        body { font-family: sans-serif; padding: 2rem; }
+        .panel { border: 2px solid #333; padding: 1rem; border-radius: 8px; margin-top: 1rem; }
+        .btn-borrar { margin-left: 10px; background: #ff4c4c; color: white; border: none; cursor: pointer; padding: 2px 5px; border-radius: 3px;}
+    </style>
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <h2>Analizador de Nombres</h2>
+    <input type="text" id="inputNombre" placeholder="Introduce un nombre">
+    <button id="btnAnalizar">Analizar</button>
+
+    <div id="panelResultado" class="panel">
+        Esperando datos...
+    </div>
+
+    <br><hr><br>
+
+    <label for="selectorTamano">Tamaño del texto del resultado:</label>
+    <select id="selectorTamano">
+        <option value="16px">Normal</option>
+        <option value="20px">Grande</option>
+        <option value="24px">Muy Grande</option>
+    </select>
+    <button id="btnAplicarTamano">Aplicar Tamaño</button>
+
+    <h3>Últimas Consultas</h3>
+    <ul id="listaConsultas"></ul>
+
+</body>
+</html>
