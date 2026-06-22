@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulacro 2 - Edad y Preferencias</title>
+    <style>
+        body { font-family: sans-serif; padding: 2rem; }
+        .caja-resultado { padding: 1rem; border: 1px solid #ccc; margin-top: 10px; border-radius: 4px; transition: background 0.3s; }
+        .error { color: red; font-weight: bold; }
+    </style>
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <h2>Adivinador de Edad</h2>
+    <input type="text" id="inputNombre" placeholder="Escribe un nombre...">
+    <button id="btnPredecir">Predecir Edad</button>
+
+    <div id="contenedorResultado" class="caja-resultado">
+        Esperando predicción...
+    </div>
+
+    <br><hr><br>
+
+    <label for="selectorFondo">Fondo del resultado:</label>
+    <select id="selectorFondo">
+        <option value="transparent">Ninguno</option>
+        <option value="#f0f8ff">Azul Claro</option>
+        <option value="#e6ffe6">Verde Claro</option>
+        <option value="#fff0f5">Rosa Claro</option>
+    </select>
+    <button id="btnAplicarFondo">Aplicar Fondo</button>
+
+    <h3>Nombres Consultados</h3>
+    <ul id="listaConsultas"></ul>
+
+</body>
+</html>
