@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulacro 4 - Catálogo</title>
+    <style>
+        body { font-family: sans-serif; padding: 2rem; }
+        .producto { border: 1px solid #ccc; padding: 1rem; margin-bottom: 10px; border-radius: 5px; }
+        .btn-borrar { background: red; color: white; border: none; cursor: pointer; padding: 5px; border-radius: 3px; margin-left: 10px;}
+        #areaFavoritos { padding: 1rem; border-radius: 8px; transition: background 0.3s; }
+    </style>
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <h2>Buscador de Tienda</h2>
+    <input type="text" id="inputBusqueda" placeholder="Ej: jacket, ring, disk...">
+    <button id="btnBuscar">Buscar Productos</button>
+
+    <div id="resultadosBusqueda"></div>
+
+    <br><hr><br>
+
+    <div id="areaFavoritos">
+        <h3>Lista de Deseos (Guardados)</h3>
+        <label for="selectorFondo">Fondo de esta sección:</label>
+        <select id="selectorFondo">
+            <option value="transparent">Ninguno</option>
+            <option value="#ffebcd">Naranja Suave</option>
+            <option value="#e0ffff">Cian Suave</option>
+        </select>
+        <button id="btnAplicarFondo">Aplicar Fondo</button>
+
+        <ul id="listaDeseos"></ul>
+    </div>
+
+</body>
+</html>

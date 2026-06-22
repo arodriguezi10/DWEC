@@ -32,6 +32,7 @@ function buscar() {
             `;
 
             contenedorResultado.innerHTML = html;
+            
         })
         .catch((error) => {
             console.error("Error: " + error);

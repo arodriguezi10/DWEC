@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Simulacro 5 - Pokédex</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 2rem;
+            transition: color 0.3s;
+        }
+
+        .tarjeta {
+            border: 2px solid #333;
+            padding: 1rem;
+            width: 200px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .historial-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .historial-item img {
+            width: 50px;
+        }
+    </style>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <label for="selectorColorTexto">Color general del texto:</label>
+    <select id="selectorColorTexto">
+        <option value="black">Negro</option>
+        <option value="#3366cc">Azul Pokémon</option>
+        <option value="#cc0000">Rojo Pokémon</option>
+    </select>
+    <button id="btnAplicarColor">Aplicar Color</button>
+
+    <br>
+    <hr><br>
+
+    <h2>Capturar Pokémon</h2>
+    <input type="text" id="inputPokemon" placeholder="Ej: pikachu, mewtwo, ditto">
+    <button id="btnCapturar">Buscar y Capturar</button>
+
+    <div id="resultadoBusqueda"></div>
+
+    <h3>Mis Pokémon (LocalStorage)</h3>
+    <div id="listaCapturados"></div>
+
+</body>
+
+</html>
