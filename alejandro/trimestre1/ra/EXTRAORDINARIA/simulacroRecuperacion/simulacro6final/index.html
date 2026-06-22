@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulacro 6 - Fichas</title>
+    <style>
+        body { font-family: sans-serif; padding: 2rem; }
+        .ficha { border: 2px solid #ccc; padding: 1rem; max-width: 300px; margin-top: 1rem; border-radius: 8px; }
+        .ficha img { width: 100px; border-radius: 50%; }
+        .historial-grid { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
+        .item-guardado { border: 1px dashed #666; padding: 0.5rem; text-align: center; }
+        .item-guardado img { width: 50px; border-radius: 50%; }
+    </style>
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <label for="selectorBorde">Color del borde de las fichas:</label>
+    <select id="selectorBorde">
+        <option value="#ccc">Gris Claro</option>
+        <option value="#ff9900">Naranja</option>
+        <option value="#00cc66">Verde</option>
+    </select>
+    <button id="btnAplicarBorde">Aplicar Borde</button>
+
+    <br><hr><br>
+
+    <h2>Buscar Desarrollador</h2>
+    <input type="text" id="inputUser" placeholder="Ej: octocat, gaearon">
+    <button id="btnBuscarUser">Buscar y Guardar</button>
+
+    <div id="resultadoFicha"></div>
+
+    <h3>Usuarios Consultados</h3>
+    <div id="listaConsultados" class="historial-grid"></div>
+
+</body>
+</html>
